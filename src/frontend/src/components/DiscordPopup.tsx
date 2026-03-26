@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { MetalButton } from "./ui/liquid-glass-button";
 
 interface DiscordPopupProps {
   onClose: () => void;
@@ -150,52 +151,24 @@ export default function DiscordPopup({ onClose }: DiscordPopupProps) {
       </div>
 
       {/* CTA Button */}
-      <button
-        type="button"
-        onClick={() => window.open("https://discord.gg/darksanta", "_blank")}
-        data-ocid="discord.open_modal_button"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-          width: "100%",
-          padding: "10px 0",
-          borderRadius: 12,
-          border: "none",
-          cursor: "pointer",
-          background: "linear-gradient(135deg, #ff2d55 0%, #2A79FF 100%)",
-          boxShadow:
-            "0 4px 24px rgba(255,45,85,0.35), 0 4px 24px rgba(42,121,255,0.2)",
-          color: "#FFFFFF",
-          fontWeight: 700,
-          fontSize: 14,
-          transition: "transform 0.15s ease, box-shadow 0.15s ease",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.transform =
-            "scale(1.03)";
-          (e.currentTarget as HTMLButtonElement).style.boxShadow =
-            "0 6px 32px rgba(255,45,85,0.5), 0 6px 32px rgba(42,121,255,0.35)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
-          (e.currentTarget as HTMLButtonElement).style.boxShadow =
-            "0 4px 24px rgba(255,45,85,0.35), 0 4px 24px rgba(42,121,255,0.2)";
-        }}
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 71 55"
-          fill="none"
-          role="img"
-          aria-label="Discord logo"
+      <div className="w-full flex justify-center">
+        <MetalButton
+          onClick={() => window.open("https://discord.gg/darksanta", "_blank")}
+          data-ocid="discord.open_modal_button"
         >
-          <path d={DISCORD_PATH} fill="white" />
-        </svg>
-        Open Discord
-      </button>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 71 55"
+            fill="none"
+            role="img"
+            aria-label="Discord logo"
+          >
+            <path d={DISCORD_PATH} fill="white" />
+          </svg>
+          Open Discord
+        </MetalButton>
+      </div>
 
       <style>{`
         @keyframes discordPopIn {

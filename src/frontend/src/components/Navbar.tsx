@@ -1,6 +1,7 @@
 import { Menu, Moon, Server, Sun, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DiscordPopup from "./DiscordPopup";
+import { MetalButton } from "./ui/liquid-glass-button";
 
 const NAV_LINKS = ["Home", "Plans", "Servers", "Pricing", "Dashboard", "Login"];
 const LOGIN_URL =
@@ -177,14 +178,13 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
           </button>
 
           <div ref={ctaRef} style={{ position: "relative" }}>
-            <button
-              type="button"
-              className="btn-glow hidden sm:flex items-center gap-2 px-5 py-2 rounded-pill text-sm font-semibold"
+            <MetalButton
               data-ocid="nav.cta.button"
               onClick={() => setShowDiscord((v) => !v)}
+              className="hidden sm:inline-flex"
             >
               Buy Server
-            </button>
+            </MetalButton>
             {showDiscord && (
               <DiscordPopup onClose={() => setShowDiscord(false)} />
             )}
@@ -254,13 +254,11 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
               </button>
             );
           })}
-          <button
-            type="button"
-            className="btn-glow mt-2 py-3 rounded-pill text-sm font-semibold"
-            data-ocid="nav.mobile.cta.button"
-          >
-            Buy Server
-          </button>
+          <div className="mt-2 w-full flex justify-center">
+            <MetalButton data-ocid="nav.mobile.cta.button">
+              Buy Server
+            </MetalButton>
+          </div>
         </div>
       )}
     </header>

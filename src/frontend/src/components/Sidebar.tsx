@@ -16,16 +16,16 @@ import {
 import { useEffect, useState } from "react";
 
 const MENU_ITEMS = [
-  { icon: Home, label: "Home", color: "#22e6ff" },
-  { icon: Compass, label: "Explore", color: "#2a79ff" },
-  { icon: LayoutDashboard, label: "Dashboard", color: "#b14cff" },
-  { icon: BarChart2, label: "Analytics", color: "#22e6ff" },
-  { icon: MessageCircle, label: "Messages", color: "#2a79ff" },
-  { icon: Bell, label: "Notifications", color: "#b14cff" },
-  { icon: Settings, label: "Settings", color: "#22e6ff" },
-  { icon: User, label: "Profile", color: "#2a79ff" },
-  { icon: HelpCircle, label: "Help", color: "#b14cff" },
-  { icon: LogOut, label: "Logout", color: "#ff4c6a" },
+  { icon: Home, label: "Home", color: "#FF2D55" },
+  { icon: Compass, label: "Explore", color: "#2A79FF" },
+  { icon: LayoutDashboard, label: "Dashboard", color: "#00DC64" },
+  { icon: BarChart2, label: "Analytics", color: "#FF2D55" },
+  { icon: MessageCircle, label: "Messages", color: "#2A79FF" },
+  { icon: Bell, label: "Notifications", color: "#00DC64" },
+  { icon: Settings, label: "Settings", color: "#FF2D55" },
+  { icon: User, label: "Profile", color: "#2A79FF" },
+  { icon: HelpCircle, label: "Help", color: "#00DC64" },
+  { icon: LogOut, label: "Logout", color: "#FF2D55" },
 ];
 
 interface SidebarProps {
@@ -74,18 +74,17 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: isDark
-            ? "rgba(255,255,255,0.06)"
-            : "rgba(255,255,255,0.06)",
+          background: "rgba(255,255,255,0.06)",
           backdropFilter: "blur(30px) saturate(200%)",
           WebkitBackdropFilter: "blur(30px) saturate(200%)",
-          border: "1px solid rgba(34,230,255,0.38)",
+          border: "1px solid rgba(255,45,85,0.5)",
           boxShadow:
-            "0 0 24px rgba(34,230,255,0.3), 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)",
+            "0 0 24px rgba(255,45,85,0.4), 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)",
           cursor: "pointer",
           transition:
             "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease",
           color: isDark ? "#f4f7ff" : "#e8edf8",
+          animation: "rgb-glow-trigger 4s linear infinite",
         }}
       >
         <span
@@ -131,19 +130,20 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
           zIndex: 9100,
           display: "flex",
           flexDirection: "column",
-          background: isDark ? "rgba(6, 8, 20, 0.08)" : "rgba(28, 36, 70, 0.1)",
-          backdropFilter: "blur(80px) saturate(220%)",
-          WebkitBackdropFilter: "blur(80px) saturate(220%)",
-          borderRight: isDark
-            ? "1px solid rgba(139,92,246,0.2)"
-            : "1px solid rgba(255,255,255,0.12)",
+          background: isDark
+            ? "rgba(4, 5, 15, 0.04)"
+            : "rgba(10, 12, 28, 0.06)",
+          backdropFilter: "blur(120px) saturate(300%)",
+          WebkitBackdropFilter: "blur(120px) saturate(300%)",
+          borderRight: "1px solid rgba(42,121,255,0.3)",
           boxShadow: isDark
-            ? "4px 0 80px rgba(0,0,0,0.7), inset -1px 0 0 rgba(139,92,246,0.1), 0 0 40px rgba(139,92,246,0.06)"
+            ? "4px 0 80px rgba(0,0,0,0.7), inset -1px 0 0 rgba(255,255,255,0.04)"
             : "4px 0 40px rgba(0,0,0,0.4), inset -1px 0 0 rgba(255,255,255,0.07)",
           transform: isOpen ? "translateX(0)" : "translateX(-100%)",
           transition: "transform 0.42s cubic-bezier(0.34,1.56,0.64,1)",
           overflowY: "auto",
           overflowX: "hidden",
+          animation: "rgb-sidebar-border 4s linear infinite",
         }}
       >
         {/* Inner reflection */}
@@ -175,8 +175,10 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                 width: "40px",
                 height: "40px",
                 borderRadius: "14px",
-                background: "linear-gradient(135deg, #22E6FF, #2A79FF)",
-                boxShadow: "0 0 24px rgba(34,230,255,0.55)",
+                background:
+                  "linear-gradient(135deg, #FF2D55, #2A79FF, #00DC64)",
+                boxShadow:
+                  "0 0 24px rgba(255,45,85,0.55), 0 0 40px rgba(42,121,255,0.3)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -185,7 +187,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
             >
               <Zap
                 className="w-5 h-5"
-                style={{ color: "#060713" }}
+                style={{ color: "#ffffff" }}
                 fill="currentColor"
               />
             </div>
@@ -196,9 +198,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                   fontSize: "16px",
                   letterSpacing: "-0.3px",
                   color: isDark ? "#f4f7ff" : "#e8edf8",
-                  textShadow: isDark
-                    ? "0 0 24px rgba(34,230,255,0.45)"
-                    : "none",
+                  textShadow: isDark ? "0 0 24px rgba(255,45,85,0.45)" : "none",
                 }}
               >
                 DarkSanta
@@ -255,12 +255,12 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                   background: isActive
                     ? isDark
                       ? `${item.color}18`
-                      : "rgba(34,230,255,0.15)"
+                      : "rgba(255,45,85,0.15)"
                     : isDashboardItem
-                      ? "rgba(177,76,255,0.1)"
+                      ? "rgba(0,220,100,0.1)"
                       : "transparent",
                   color: isLogout
-                    ? "#ff4c6a"
+                    ? "#FF2D55"
                     : isActive
                       ? isDark
                         ? "#f4f7ff"
@@ -271,12 +271,12 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                   borderLeft: isActive
                     ? `3px solid ${item.color}`
                     : isDashboardItem
-                      ? "3px solid rgba(177,76,255,0.5)"
+                      ? "3px solid rgba(0,220,100,0.5)"
                       : "3px solid transparent",
                   boxShadow: isActive
                     ? `0 0 24px ${item.color}30, inset 0 1px 0 rgba(255,255,255,0.06)`
                     : isDashboardItem
-                      ? "0 0 20px rgba(177,76,255,0.25), inset 0 1px 0 rgba(255,255,255,0.04)"
+                      ? "0 0 20px rgba(0,220,100,0.25), inset 0 1px 0 rgba(255,255,255,0.04)"
                       : "none",
                   opacity: mounted ? 1 : 0,
                   transform:
@@ -286,24 +286,22 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                 onMouseEnter={(e) => {
                   if (!isActive) {
                     const el = e.currentTarget as HTMLButtonElement;
-                    el.style.background = isDark
-                      ? `${item.color}10`
-                      : `${item.color}10`;
+                    el.style.background = `${item.color}10`;
                     el.style.borderLeftColor = item.color;
-                    el.style.boxShadow = `0 0 20px ${item.color}22`;
+                    el.style.boxShadow = `0 0 20px ${item.color}33`;
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
                     const el = e.currentTarget as HTMLButtonElement;
                     el.style.background = isDashboardItem
-                      ? "rgba(177,76,255,0.1)"
+                      ? "rgba(0,220,100,0.1)"
                       : "transparent";
                     el.style.borderLeftColor = isDashboardItem
-                      ? "rgba(177,76,255,0.5)"
+                      ? "rgba(0,220,100,0.5)"
                       : "transparent";
                     el.style.boxShadow = isDashboardItem
-                      ? "0 0 20px rgba(177,76,255,0.25), inset 0 1px 0 rgba(255,255,255,0.04)"
+                      ? "0 0 20px rgba(0,220,100,0.25), inset 0 1px 0 rgba(255,255,255,0.04)"
                       : "none";
                   }
                 }}
@@ -316,14 +314,14 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                     background: isActive
                       ? `${item.color}22`
                       : isDashboardItem
-                        ? "rgba(177,76,255,0.18)"
+                        ? "rgba(0,220,100,0.18)"
                         : isDark
                           ? "rgba(255,255,255,0.06)"
                           : "rgba(255,255,255,0.06)",
                     border: isActive
                       ? `1px solid ${item.color}55`
                       : isDashboardItem
-                        ? "1px solid rgba(177,76,255,0.45)"
+                        ? "1px solid rgba(0,220,100,0.45)"
                         : "1px solid transparent",
                     display: "flex",
                     alignItems: "center",
@@ -333,7 +331,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                     boxShadow: isActive
                       ? `0 0 16px ${item.color}40`
                       : isDashboardItem
-                        ? "0 0 20px rgba(177,76,255,0.4)"
+                        ? "0 0 20px rgba(0,220,100,0.4)"
                         : "none",
                   }}
                 >
@@ -343,9 +341,9 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                       color: isActive
                         ? item.color
                         : isDashboardItem
-                          ? "#b14cff"
+                          ? "#00DC64"
                           : isLogout
-                            ? "#ff4c6a"
+                            ? "#FF2D55"
                             : isDark
                               ? "rgba(185,195,218,0.7)"
                               : "rgba(185,195,218,0.6)",
@@ -364,13 +362,13 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                   <span
                     style={{
                       marginLeft: "auto",
-                      background: "linear-gradient(135deg,#b14cff,#2a79ff)",
+                      background: "linear-gradient(135deg, #00DC64, #2a79ff)",
                       color: "#fff",
                       fontSize: "9px",
                       fontWeight: 700,
                       borderRadius: "999px",
                       padding: "2px 7px",
-                      boxShadow: "0 0 10px rgba(177,76,255,0.5)",
+                      boxShadow: "0 0 10px rgba(0,220,100,0.6)",
                       letterSpacing: "0.05em",
                     }}
                   >
@@ -381,13 +379,13 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                   <span
                     style={{
                       marginLeft: "auto",
-                      background: "linear-gradient(135deg,#22e6ff,#2a79ff)",
-                      color: "#060713",
+                      background: "linear-gradient(135deg, #FF2D55, #2a79ff)",
+                      color: "#fff",
                       fontSize: "10px",
                       fontWeight: 700,
                       borderRadius: "999px",
                       padding: "1px 7px",
-                      boxShadow: "0 0 12px rgba(34,230,255,0.5)",
+                      boxShadow: "0 0 12px rgba(255,45,85,0.5)",
                     }}
                   >
                     3
@@ -397,13 +395,13 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                   <span
                     style={{
                       marginLeft: "auto",
-                      background: "#b14cff",
+                      background: "#2A79FF",
                       color: "#fff",
                       fontSize: "10px",
                       fontWeight: 700,
                       borderRadius: "999px",
                       padding: "1px 7px",
-                      boxShadow: "0 0 12px rgba(177,76,255,0.5)",
+                      boxShadow: "0 0 12px rgba(42,121,255,0.5)",
                     }}
                   >
                     7
@@ -525,18 +523,23 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
 
       <style>{`
         .sidebar-trigger:hover {
-          box-shadow: 0 0 36px rgba(34,230,255,0.55), 0 6px 20px rgba(0,0,0,0.4) !important;
+          box-shadow: 0 0 36px rgba(255,45,85,0.65), 0 0 60px rgba(42,121,255,0.3), 0 6px 20px rgba(0,0,0,0.4) !important;
           transform: translateY(-50%) scale(1.1) !important;
         }
         .sidebar-trigger:active {
           transform: translateY(-50%) scale(0.93) !important;
         }
-        @keyframes sidebar-pulse {
-          0%, 100% { box-shadow: 0 0 24px rgba(34,230,255,0.3), 0 4px 16px rgba(0,0,0,0.3); }
-          50% { box-shadow: 0 0 40px rgba(34,230,255,0.6), 0 4px 16px rgba(0,0,0,0.3); }
+        @keyframes rgb-glow-trigger {
+          0%   { box-shadow: 0 0 24px rgba(255,45,85,0.5), 0 4px 16px rgba(0,0,0,0.3); border-color: rgba(255,45,85,0.5); }
+          33%  { box-shadow: 0 0 24px rgba(42,121,255,0.55), 0 4px 16px rgba(0,0,0,0.3); border-color: rgba(42,121,255,0.55); }
+          66%  { box-shadow: 0 0 24px rgba(0,220,100,0.5), 0 4px 16px rgba(0,0,0,0.3); border-color: rgba(0,220,100,0.5); }
+          100% { box-shadow: 0 0 24px rgba(255,45,85,0.5), 0 4px 16px rgba(0,0,0,0.3); border-color: rgba(255,45,85,0.5); }
         }
-        .sidebar-trigger {
-          animation: sidebar-pulse 3s ease-in-out infinite;
+        @keyframes rgb-sidebar-border {
+          0%   { border-right-color: rgba(255,45,85,0.35); }
+          33%  { border-right-color: rgba(42,121,255,0.4); }
+          66%  { border-right-color: rgba(0,220,100,0.35); }
+          100% { border-right-color: rgba(255,45,85,0.35); }
         }
       `}</style>
     </>

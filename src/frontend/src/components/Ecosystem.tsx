@@ -1,5 +1,6 @@
 import { Globe, Headphones, Server, Shield } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { LiquidButton, MetalButton } from "./ui/liquid-glass-button";
 import { GlowCard } from "./ui/spotlight-card";
 
 const STATS = [
@@ -183,20 +184,16 @@ export default function Ecosystem() {
               instant provisioning.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                type="button"
-                className="btn-glow px-8 py-3.5 rounded-pill text-sm font-bold"
-                data-ocid="stats.cta.primary_button"
-              >
+              <MetalButton data-ocid="stats.cta.primary_button">
                 Deploy Now
-              </button>
-              <button
-                type="button"
-                className="btn-glass px-8 py-3.5 rounded-pill text-sm font-semibold"
+              </MetalButton>
+              <LiquidButton
+                size="lg"
                 data-ocid="stats.cta.secondary_button"
+                className="rounded-full px-8 py-3.5 text-sm font-semibold text-white/80"
               >
                 View Pricing
-              </button>
+              </LiquidButton>
             </div>
           </div>
         </div>

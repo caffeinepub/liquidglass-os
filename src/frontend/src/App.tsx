@@ -28,9 +28,14 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
+  const navigateToMain = () => {
+    window.location.hash = "#/home";
+    setPage("main");
+  };
+
   if (page === "main") {
     return <MainSitePage />;
   }
 
-  return <LandingPage />;
+  return <LandingPage onEnter={navigateToMain} />;
 }

@@ -78,6 +78,10 @@ export default function MainSitePage() {
           className="glow-blob glow-blob-aurora"
           style={{ top: "40%", left: "30%" }}
         />
+        <div
+          className="glow-blob glow-blob-green"
+          style={{ bottom: "30%", right: "20%" }}
+        />
       </div>
 
       <Sidebar isDark={isDark} onToggleTheme={() => setIsDark((v) => !v)} />

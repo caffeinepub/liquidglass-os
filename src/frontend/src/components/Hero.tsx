@@ -1,6 +1,7 @@
 import { Activity, ArrowRight, Cpu, Gauge, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DiscordPopup from "./DiscordPopup";
+import { LiquidButton, MetalButton } from "./ui/liquid-glass-button";
 
 function ripple(e: React.MouseEvent<HTMLButtonElement>) {
   const btn = e.currentTarget;
@@ -106,17 +107,24 @@ function ServerMetricCard({
 export default function Hero() {
   const panelsRef = useRef<HTMLDivElement>(null);
   const [showDiscord, setShowDiscord] = useState(false);
-  const [btnHovered, setBtnHovered] = useState(false);
 
   useEffect(() => {
+    let rafId: number | null = null;
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      if (panelsRef.current) {
-        panelsRef.current.style.transform = `translateY(${scrollY * 0.12}px)`;
-      }
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        if (panelsRef.current) {
+          panelsRef.current.style.transform = `translateY(${scrollY * 0.12}px)`;
+        }
+        rafId = null;
+      });
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
@@ -134,7 +142,11 @@ export default function Hero() {
       <div
         ref={panelsRef}
         className="relative w-full max-w-4xl flex justify-center items-end gap-4 mb-[-40px] z-10 px-4"
-        style={{ transition: "transform 0.1s linear" }}
+        style={{
+          transition: "transform 0.1s linear",
+          willChange: "transform",
+          transform: "translateZ(0)",
+        }}
       >
         <ServerMetricCard
           icon={Cpu}
@@ -207,7 +219,8 @@ export default function Hero() {
           Minecraft Servers{" "}
           <span
             style={{
-              background: "linear-gradient(135deg, #FF6B7A, #2A79FF, #7B2FFF)",
+              background:
+                "linear-gradient(135deg, #FF2D55 0%, #2A79FF 50%, #00DC64 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -225,49 +238,31 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          {/* Primary button with glow halo */}
+          {/* Primary button */}
           <div style={{ position: "relative" }}>
-            {/* Glow halo behind button */}
-            <div
-              style={{
-                position: "absolute",
-                inset: "-8px",
-                background: "rgba(42,121,255,0.2)",
-                filter: "blur(20px)",
-                borderRadius: "999px",
-                zIndex: -1,
-                opacity: btnHovered ? 1 : 0,
-                transition: "opacity 0.2s ease-in-out",
-                pointerEvents: "none",
-              }}
-            />
-            <button
-              type="button"
-              className="btn-glow flex items-center gap-2 px-8 py-3.5 rounded-pill text-sm font-bold w-full sm:w-auto justify-center"
+            <MetalButton
               data-ocid="hero.cta.primary_button"
-              onMouseEnter={() => setBtnHovered(true)}
-              onMouseLeave={() => setBtnHovered(false)}
               onClick={(e) => {
-                ripple(e);
+                ripple(e as React.MouseEvent<HTMLButtonElement>);
                 setShowDiscord((v) => !v);
               }}
             >
               <Zap className="w-4 h-4" fill="currentColor" />
               Buy Server
-            </button>
+            </MetalButton>
             {showDiscord && (
               <DiscordPopup onClose={() => setShowDiscord(false)} />
             )}
           </div>
-          <button
-            type="button"
-            className="btn-glass flex items-center gap-2 px-8 py-3.5 rounded-pill text-sm font-semibold w-full sm:w-auto justify-center"
+          <LiquidButton
+            size="lg"
             data-ocid="hero.cta.secondary_button"
-            onClick={ripple}
+            onClick={ripple as React.MouseEventHandler<HTMLButtonElement>}
+            className="rounded-full px-8 py-3.5 text-sm font-semibold text-white/90"
           >
             View Plans
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </LiquidButton>
         </div>
 
         {/* Trust badges */}

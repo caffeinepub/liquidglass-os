@@ -1,5 +1,7 @@
 import { Cpu, Globe, HardDrive, MemoryStick, Zap } from "lucide-react";
+import type React from "react";
 import { useRef } from "react";
+import { MetalButton } from "./ui/liquid-glass-button";
 
 function ripple(e: React.MouseEvent<HTMLButtonElement>) {
   const btn = e.currentTarget;
@@ -220,15 +222,15 @@ function PlanCard({
           </li>
         </ul>
 
-        <button
-          type="button"
-          className="btn-glow w-full flex items-center justify-center gap-2 py-3 rounded-pill text-sm font-bold"
-          data-ocid={`plans.buy.button.${index + 1}`}
-          onClick={ripple}
-        >
-          <Zap className="w-4 h-4" fill="currentColor" />
-          Buy Now
-        </button>
+        <div className="w-full flex justify-center">
+          <MetalButton
+            data-ocid={`plans.buy.button.${index + 1}`}
+            onClick={ripple as React.MouseEventHandler<HTMLButtonElement>}
+          >
+            <Zap className="w-4 h-4" fill="currentColor" />
+            Buy Now
+          </MetalButton>
+        </div>
       </div>
     </div>
   );
