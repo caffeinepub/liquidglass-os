@@ -1,7 +1,7 @@
 import { RefreshCw, Shield, Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { AuroraButton } from "./ui/aurora-button";
 import { GlowCard } from "./ui/spotlight-card";
-import { StarButton } from "./ui/star-button";
 
 function AnimatedMetricBar({
   label,
@@ -297,16 +297,17 @@ export default function Dashboard() {
                     Quick Actions
                   </div>
                   <div className="flex flex-col gap-3">
-                    {QUICK_ACTIONS.map(({ icon: Icon, label, lightColor }) => (
-                      <StarButton
+                    {QUICK_ACTIONS.map(({ icon: Icon, label }) => (
+                      <AuroraButton
                         key={label}
-                        lightColor={lightColor}
-                        className="w-full justify-start gap-3 px-3 py-2.5 rounded-xl h-auto text-sm font-medium"
+                        variant="blue"
+                        size="sm"
+                        className="w-full justify-start gap-3 px-3 py-2"
                         data-ocid={`dashboard.${label.toLowerCase()}.button`}
                       >
                         <Icon className="w-4 h-4" />
                         {label}
-                      </StarButton>
+                      </AuroraButton>
                     ))}
                   </div>
                 </GlowCard>

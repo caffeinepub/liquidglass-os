@@ -3,7 +3,7 @@ import type React from "react";
 import { useRef, useState } from "react";
 import SectionRow from "./SectionRow";
 import type { ServerCardData } from "./ui/ServerCard";
-import { MetalButton } from "./ui/liquid-glass-button";
+import { AuroraButton } from "./ui/aurora-button";
 
 function ripple(e: React.MouseEvent<HTMLButtonElement>) {
   const btn = e.currentTarget;
@@ -303,13 +303,14 @@ function FeaturedBanner() {
                 /mo
               </span>
             </div>
-            <MetalButton
+            <AuroraButton
+              variant="default"
+              size="md"
               data-ocid="featured.deploy.primary_button"
-              variant="primary"
               onClick={ripple as React.MouseEventHandler<HTMLButtonElement>}
             >
               🚀 Deploy Now
-            </MetalButton>
+            </AuroraButton>
           </div>
         </div>
 

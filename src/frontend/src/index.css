@@ -1359,3 +1359,12 @@ html.light [data-beams-bg]::after {
     offset-distance: 100%;
   }
 }
+
+@keyframes aurora-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

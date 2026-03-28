@@ -1,6 +1,6 @@
 import { Cpu, Globe, HardDrive, MemoryStick } from "lucide-react";
 import { useRef, useState } from "react";
-import { MetalButton } from "./liquid-glass-button";
+import { AuroraButton } from "./aurora-button";
 
 export interface ServerCardData {
   name: string;
@@ -187,14 +187,15 @@ export default function ServerCard({
         )}
       </ul>
 
-      <MetalButton
-        data-ocid={`server_card.buy.button.${index + 1}`}
+      <AuroraButton
+        variant="green"
+        size="sm"
+        data-ocid={`server_card.buy.button.${String(index + 1)}`}
         onClick={onBuy}
-        className="w-full justify-center text-xs"
-        style={{ fontSize: 12 }}
+        className="w-full justify-center"
       >
         Deploy Now
-      </MetalButton>
+      </AuroraButton>
     </div>
   );
 }

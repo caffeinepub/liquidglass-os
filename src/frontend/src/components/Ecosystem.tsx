@@ -1,6 +1,6 @@
 import { Globe, Headphones, Server, Shield } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { LiquidButton, MetalButton } from "./ui/liquid-glass-button";
+import { AuroraButton } from "./ui/aurora-button";
 import { GlowCard } from "./ui/spotlight-card";
 
 const STATS = [
@@ -184,16 +184,20 @@ export default function Ecosystem() {
               instant provisioning.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <MetalButton data-ocid="stats.cta.primary_button">
+              <AuroraButton
+                variant="default"
+                size="md"
+                data-ocid="stats.cta.primary_button"
+              >
                 Deploy Now
-              </MetalButton>
-              <LiquidButton
-                size="lg"
+              </AuroraButton>
+              <AuroraButton
+                variant="blue"
+                size="md"
                 data-ocid="stats.cta.secondary_button"
-                className="rounded-full px-8 py-3.5 text-sm font-semibold text-white/80"
               >
                 View Pricing
-              </LiquidButton>
+              </AuroraButton>
             </div>
           </div>
         </div>
