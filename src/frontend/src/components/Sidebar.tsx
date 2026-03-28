@@ -34,6 +34,15 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" && window.innerWidth < 768,
+  );
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
   const [isOpen, setIsOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
   const [mounted, setMounted] = useState(false);
@@ -52,6 +61,16 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
+
+  const glassPanel = {
+    backdropFilter: "blur(60px) saturate(250%) brightness(0.85)",
+    WebkitBackdropFilter: "blur(60px) saturate(250%) brightness(0.85)",
+    background: isDark ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.75)",
+    borderRadius: "16px",
+    border: "1px solid rgba(255,255,255,0.08)",
+    boxShadow:
+      "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.2)",
+  } as React.CSSProperties;
 
   return (
     <>
@@ -130,10 +149,22 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
           zIndex: 9100,
           display: "flex",
           flexDirection: "column",
-          background: "rgba(2, 4, 16, 0.55)",
-          backdropFilter: "blur(80px) saturate(280%) brightness(0.72)",
-          WebkitBackdropFilter: "blur(80px) saturate(280%) brightness(0.72)",
-          borderRight: "1px solid rgba(255,255,255,0.07)",
+          background: isDark
+            ? "rgba(2, 4, 16, 0.55)"
+            : "rgba(255, 255, 255, 0.88)",
+          backdropFilter: isDark
+            ? isMobile
+              ? "blur(16px) saturate(200%)"
+              : "blur(100px) saturate(300%) brightness(0.65)"
+            : "blur(20px)",
+          WebkitBackdropFilter: isDark
+            ? isMobile
+              ? "blur(16px) saturate(200%)"
+              : "blur(100px) saturate(300%) brightness(0.65)"
+            : "blur(20px)",
+          borderRight: isDark
+            ? "1px solid rgba(255,255,255,0.07)"
+            : "1px solid rgba(0,0,0,0.08)",
           boxShadow:
             "8px 0 80px rgba(0,0,0,0.8), inset -1px 0 0 rgba(255,255,255,0.06), inset 0 0 120px rgba(42,121,255,0.06), inset 0 0 80px rgba(168,85,247,0.04), inset 0 0 40px rgba(34,211,238,0.03)",
           transform: isOpen ? "translateX(0)" : "translateX(-100%)",
@@ -141,6 +172,8 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
           overflowY: "auto",
           overflowX: "hidden",
           animation: "rgb-sidebar-border 4s linear infinite",
+          gap: "8px",
+          padding: "8px",
         }}
       >
         {/* Inner top reflection */}
@@ -154,6 +187,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
             background:
               "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%)",
             pointerEvents: "none",
+            zIndex: 0,
           }}
         />
 
@@ -168,16 +202,18 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
             background:
               "linear-gradient(0deg, rgba(42,121,255,0.04) 0%, transparent 100%)",
             pointerEvents: "none",
+            zIndex: 0,
           }}
         />
 
-        {/* Sidebar Header */}
+        {/* Sidebar Header — glass card */}
         <div
           style={{
-            padding: "28px 24px 20px",
-            borderBottom: isDark
-              ? "1px solid rgba(255,255,255,0.08)"
-              : "1px solid rgba(255,255,255,0.08)",
+            ...glassPanel,
+            padding: "20px 16px 16px",
+            flexShrink: 0,
+            position: "relative",
+            zIndex: 1,
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -208,7 +244,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                   fontWeight: 700,
                   fontSize: "16px",
                   letterSpacing: "-0.3px",
-                  color: isDark ? "#f4f7ff" : "#e8edf8",
+                  color: isDark ? "#f4f7ff" : "#0a0a1a",
                   textShadow: isDark ? "0 0 24px rgba(255,45,85,0.45)" : "none",
                 }}
               >
@@ -219,7 +255,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                   fontSize: "11px",
                   color: isDark
                     ? "rgba(185,195,218,0.6)"
-                    : "rgba(185,195,218,0.5)",
+                    : "rgba(60,60,80,0.6)",
                   marginTop: "1px",
                 }}
               >
@@ -229,14 +265,17 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
           </div>
         </div>
 
-        {/* Menu Items */}
+        {/* Menu Items — glass card */}
         <nav
           style={{
+            ...glassPanel,
             flex: 1,
-            padding: "16px 12px",
+            padding: "12px 8px",
             display: "flex",
             flexDirection: "column",
             gap: "4px",
+            position: "relative",
+            zIndex: 1,
           }}
         >
           {MENU_ITEMS.map((item, idx) => {
@@ -278,7 +317,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                         : "#0a0a1a"
                       : isDark
                         ? "rgba(185,195,218,0.85)"
-                        : "rgba(185,195,218,0.85)",
+                        : "rgba(30,30,50,0.85)",
                   borderLeft: isActive
                     ? `3px solid ${item.color}`
                     : isDashboardItem
@@ -328,7 +367,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                         ? "rgba(0,220,100,0.18)"
                         : isDark
                           ? "rgba(255,255,255,0.06)"
-                          : "rgba(255,255,255,0.06)",
+                          : "rgba(0,0,0,0.05)",
                     border: isActive
                       ? `1px solid ${item.color}55`
                       : isDashboardItem
@@ -357,7 +396,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
                             ? "#FF2D55"
                             : isDark
                               ? "rgba(185,195,218,0.7)"
-                              : "rgba(185,195,218,0.6)",
+                              : "rgba(60,60,80,0.7)",
                     }}
                   />
                 </div>
@@ -423,13 +462,14 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
           })}
         </nav>
 
-        {/* Theme Toggle at bottom */}
+        {/* Theme Toggle — glass card */}
         <div
           style={{
-            padding: "20px 24px 28px",
-            borderTop: isDark
-              ? "1px solid rgba(255,255,255,0.08)"
-              : "1px solid rgba(255,255,255,0.08)",
+            ...glassPanel,
+            padding: "16px",
+            flexShrink: 0,
+            position: "relative",
+            zIndex: 1,
           }}
         >
           <div
@@ -438,7 +478,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
               fontWeight: 600,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: isDark ? "rgba(185,195,218,0.5)" : "rgba(185,195,218,0.5)",
+              color: isDark ? "rgba(185,195,218,0.5)" : "rgba(60,60,80,0.5)",
               marginBottom: "12px",
             }}
           >

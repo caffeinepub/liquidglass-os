@@ -6,7 +6,6 @@ import Ecosystem from "../components/Ecosystem";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
-import RightDock from "../components/RightDock";
 import Sidebar from "../components/Sidebar";
 import { BeamsBackground } from "../components/ui/beams-background";
 
@@ -87,7 +86,6 @@ export default function MainSitePage() {
 
       <Sidebar isDark={isDark} onToggleTheme={() => setIsDark((v) => !v)} />
       <Navbar isDark={isDark} onToggleTheme={() => setIsDark((v) => !v)} />
-      <RightDock />
       <main style={{ position: "relative", zIndex: 1 }}>
         <Hero />
         <Cards />

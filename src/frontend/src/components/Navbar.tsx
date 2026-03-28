@@ -25,14 +25,10 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50"
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md ${isDark ? "bg-black/60 border-b border-white/10" : "bg-white/80 border-b border-black/10"}`}
       style={{
-        background: scrolled ? "rgba(0,0,0,0.75)" : "rgba(0,0,0,0.55)",
-        backdropFilter: "blur(24px) saturate(200%)",
-        WebkitBackdropFilter: "blur(24px) saturate(200%)",
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
         boxShadow: scrolled ? "0 4px 24px rgba(0,0,0,0.5)" : "none",
-        transition: "background 0.3s ease, box-shadow 0.3s ease",
+        transition: "box-shadow 0.3s ease",
       }}
     >
       <nav
@@ -52,7 +48,7 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
           </div>
           <span
             className="font-bold text-[15px] tracking-tight"
-            style={{ color: isDark ? "#F4F7FF" : "#e8edf8" }}
+            style={{ color: isDark ? "#F4F7FF" : "#0f172a" }}
           >
             DarkSanta
           </span>
@@ -198,12 +194,7 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
       {/* Mobile menu */}
       {menuOpen && (
         <div
-          className="absolute top-[60px] left-0 right-0 p-4 flex flex-col gap-2"
-          style={{
-            background: "rgba(0,0,0,0.85)",
-            backdropFilter: "blur(24px)",
-            borderBottom: "1px solid rgba(255,255,255,0.08)",
-          }}
+          className="absolute top-[60px] left-0 right-0 p-4 flex flex-col gap-2 bg-black/60 backdrop-blur-md border-b border-white/10"
           data-ocid="nav.mobile.panel"
         >
           {NAV_LINKS.map((link) => {

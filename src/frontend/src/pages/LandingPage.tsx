@@ -89,145 +89,15 @@ const PARTICLES = [
     delay: 2.8,
     opacity: 0.75,
   },
-  {
-    id: "p8",
-    left: "42.6%",
-    top: "68.4%",
-    size: 3,
-    color: "#00d4ff",
-    glow: 6,
-    dur: 7,
-    delay: 3.2,
-    opacity: 0.9,
-  },
-  {
-    id: "p9",
-    left: "47.3%",
-    top: "75.7%",
-    size: 4,
-    color: "#bf5fff",
-    glow: 9,
-    dur: 8,
-    delay: 3.6,
-    opacity: 0.6,
-  },
-  {
-    id: "p10",
-    left: "52%",
-    top: "10%",
-    size: 2,
-    color: "#1bffd5",
-    glow: 12,
-    dur: 4,
-    delay: 0,
-    opacity: 0.75,
-  },
-  {
-    id: "p11",
-    left: "56.7%",
-    top: "17.3%",
-    size: 3,
-    color: "#ff3cac",
-    glow: 15,
-    dur: 5,
-    delay: 0.4,
-    opacity: 0.9,
-  },
-  {
-    id: "p12",
-    left: "61.4%",
-    top: "24.6%",
-    size: 4,
-    color: "#00d4ff",
-    glow: 6,
-    dur: 6,
-    delay: 0.8,
-    opacity: 0.6,
-  },
-  {
-    id: "p13",
-    left: "66.1%",
-    top: "31.9%",
-    size: 2,
-    color: "#bf5fff",
-    glow: 9,
-    dur: 7,
-    delay: 1.2,
-    opacity: 0.75,
-  },
-  {
-    id: "p14",
-    left: "70.8%",
-    top: "39.2%",
-    size: 3,
-    color: "#1bffd5",
-    glow: 12,
-    dur: 8,
-    delay: 1.6,
-    opacity: 0.9,
-  },
-  {
-    id: "p15",
-    left: "75.5%",
-    top: "46.5%",
-    size: 4,
-    color: "#ff3cac",
-    glow: 15,
-    dur: 4,
-    delay: 2.0,
-    opacity: 0.6,
-  },
-  {
-    id: "p16",
-    left: "80.2%",
-    top: "53.8%",
-    size: 2,
-    color: "#00d4ff",
-    glow: 6,
-    dur: 5,
-    delay: 2.4,
-    opacity: 0.75,
-  },
-  {
-    id: "p17",
-    left: "84.9%",
-    top: "61.1%",
-    size: 3,
-    color: "#bf5fff",
-    glow: 9,
-    dur: 6,
-    delay: 2.8,
-    opacity: 0.9,
-  },
-  {
-    id: "p18",
-    left: "89.6%",
-    top: "68.4%",
-    size: 4,
-    color: "#1bffd5",
-    glow: 12,
-    dur: 7,
-    delay: 3.2,
-    opacity: 0.6,
-  },
-  {
-    id: "p19",
-    left: "94.3%",
-    top: "75.7%",
-    size: 2,
-    color: "#ff3cac",
-    glow: 15,
-    dur: 8,
-    delay: 3.6,
-    opacity: 0.75,
-  },
-];
+]; // trimmed to 8 particles for mobile performance
 
 interface LandingPageProps {
   onEnter: () => void;
 }
 
 export default function LandingPage({ onEnter }: LandingPageProps) {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const visibleParticles = isMobile ? [] : PARTICLES;
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Rich gradient base */}
@@ -331,7 +201,7 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
           pointerEvents: "none",
         }}
       >
-        {PARTICLES.map((p) => (
+        {visibleParticles.map((p) => (
           <div
             key={p.id}
             style={{
@@ -350,44 +220,10 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
         ))}
       </div>
 
-      {/* Rotating gradient rings */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 2,
-          pointerEvents: "none",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            width: 700,
-            height: 700,
-            borderRadius: "50%",
-            border: "1px solid transparent",
-            background:
-              "linear-gradient(#050d1f, #050d1f) padding-box, conic-gradient(from 0deg, rgba(0,212,255,0.4), rgba(139,92,246,0.4), rgba(255,0,128,0.3), rgba(0,212,255,0.4)) border-box",
-            animation: "spinRing 20s linear infinite",
-            opacity: 0.4,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: 500,
-            height: 500,
-            borderRadius: "50%",
-            border: "1px solid transparent",
-            background:
-              "linear-gradient(#050d1f, #050d1f) padding-box, conic-gradient(from 180deg, rgba(34,211,238,0.5), rgba(109,40,217,0.4), rgba(34,211,238,0.5)) border-box",
-            animation: "spinRing 14s linear infinite reverse",
-            opacity: 0.35,
-          }}
-        />
-      </div>
+      {/* Rotating gradient rings - disabled for performance */}
+      {/* <div style={{ position: "fixed", inset: 0, zIndex: 2, pointerEvents: "none", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        Spinning rings removed for mobile performance
+      </div> */}
 
       {/* Shimmer beams */}
       <div
@@ -412,19 +248,7 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
             filter: "blur(1px)",
           }}
         />
-        <div
-          style={{
-            position: "absolute",
-            top: "55%",
-            left: "-100%",
-            width: "40%",
-            height: 1,
-            background:
-              "linear-gradient(90deg, transparent, rgba(139,92,246,0.6), rgba(255,255,255,0.3), rgba(139,92,246,0.6), transparent)",
-            animation: "beamSweep 8s ease-in-out infinite 2s",
-            filter: "blur(1px)",
-          }}
-        />
+        {/* Second beam removed for performance */}
       </div>
 
       {/* Keyframes */}
