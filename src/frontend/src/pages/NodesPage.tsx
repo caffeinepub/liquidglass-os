@@ -8,6 +8,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import BottomNav from "../components/BottomNav";
 import RightDock from "../components/RightDock";
 import { BeamsBackground } from "../components/ui/beams-background";
 
@@ -888,6 +889,7 @@ export default function NodesPage() {
 
       {/* Right dock visible on nodes page too */}
       <RightDock />
+      <BottomNav />
     </div>
   );
 }
