@@ -5,8 +5,6 @@ import {
   Server,
   ShoppingCart,
 } from "lucide-react";
-import { useState } from "react";
-import DiscordPopup from "./DiscordPopup";
 import { LimelightNav, type NavItem } from "./ui/limelight-nav";
 
 const LOGIN_URL =
@@ -26,8 +24,6 @@ interface BottomNavProps {
 }
 
 export default function BottomNav({ isDark: _isDark }: BottomNavProps) {
-  const [showDiscord, setShowDiscord] = useState(false);
-
   const navItems: NavItem[] = [
     {
       id: "home",
@@ -39,7 +35,9 @@ export default function BottomNav({ isDark: _isDark }: BottomNavProps) {
       id: "servers",
       icon: <Server />,
       label: "Servers",
-      onClick: () => scrollToSection("servers"),
+      onClick: () => {
+        window.location.hash = "#/nodes";
+      },
     },
     {
       id: "dashboard",
@@ -53,13 +51,17 @@ export default function BottomNav({ isDark: _isDark }: BottomNavProps) {
       id: "nodes",
       icon: <Globe />,
       label: "Nodes",
-      onClick: () => scrollToSection("ecosystem"),
+      onClick: () => {
+        window.location.hash = "#/nodes";
+      },
     },
     {
       id: "buy",
       icon: <ShoppingCart />,
       label: "Buy",
-      onClick: () => setShowDiscord((v) => !v),
+      onClick: () => {
+        window.location.hash = "#/nodes";
+      },
     },
   ];
 
@@ -173,18 +175,6 @@ export default function BottomNav({ isDark: _isDark }: BottomNavProps) {
         </div>
 
         {/* Discord popup positioned above the dock */}
-        {showDiscord && (
-          <div
-            style={{
-              position: "absolute",
-              bottom: "calc(100% + 14px)",
-              left: "50%",
-              transform: "translateX(-50%)",
-            }}
-          >
-            <DiscordPopup onClose={() => setShowDiscord(false)} />
-          </div>
-        )}
       </div>
     </>
   );

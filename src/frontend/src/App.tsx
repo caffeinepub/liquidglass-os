@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import LandingPage from "./pages/LandingPage";
 import MainSitePage from "./pages/MainSitePage";
+import NodesPage from "./pages/NodesPage";
 
-type Page = "landing" | "main";
+type Page = "landing" | "main" | "nodes";
 
 function getInitialPage(): Page {
   if (typeof window !== "undefined") {
     const hash = window.location.hash;
+    if (hash === "#/nodes") return "nodes";
     if (hash === "#/home" || hash.startsWith("#/home")) return "main";
   }
   return "landing";
@@ -18,7 +20,9 @@ export default function App() {
   useEffect(() => {
     const onHashChange = () => {
       const hash = window.location.hash;
-      if (hash === "#/home" || hash.startsWith("#/home")) {
+      if (hash === "#/nodes") {
+        setPage("nodes");
+      } else if (hash === "#/home" || hash.startsWith("#/home")) {
         setPage("main");
       } else if (hash === "" || hash === "#/") {
         setPage("landing");
@@ -32,6 +36,10 @@ export default function App() {
     window.location.hash = "#/home";
     setPage("main");
   };
+
+  if (page === "nodes") {
+    return <NodesPage />;
+  }
 
   if (page === "main") {
     return <MainSitePage />;

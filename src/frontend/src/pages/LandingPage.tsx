@@ -503,7 +503,11 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
 
       {/* Enter Site button */}
       <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto">
-        <MetalButton data-ocid="landing.enter_site_button" onClick={onEnter}>
+        <MetalButton
+          data-ocid="landing.enter_site_button"
+          variant="cyan"
+          onClick={onEnter}
+        >
           Enter DarkSanta
           <svg
             className="w-5 h-5"

@@ -130,15 +130,12 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
           zIndex: 9100,
           display: "flex",
           flexDirection: "column",
-          background: isDark
-            ? "rgba(4, 5, 15, 0.04)"
-            : "rgba(10, 12, 28, 0.06)",
-          backdropFilter: "blur(120px) saturate(300%)",
-          WebkitBackdropFilter: "blur(120px) saturate(300%)",
-          borderRight: "1px solid rgba(42,121,255,0.3)",
-          boxShadow: isDark
-            ? "4px 0 80px rgba(0,0,0,0.7), inset -1px 0 0 rgba(255,255,255,0.04)"
-            : "4px 0 40px rgba(0,0,0,0.4), inset -1px 0 0 rgba(255,255,255,0.07)",
+          background: "rgba(2, 4, 16, 0.55)",
+          backdropFilter: "blur(80px) saturate(280%) brightness(0.72)",
+          WebkitBackdropFilter: "blur(80px) saturate(280%) brightness(0.72)",
+          borderRight: "1px solid rgba(255,255,255,0.07)",
+          boxShadow:
+            "8px 0 80px rgba(0,0,0,0.8), inset -1px 0 0 rgba(255,255,255,0.06), inset 0 0 120px rgba(42,121,255,0.06), inset 0 0 80px rgba(168,85,247,0.04), inset 0 0 40px rgba(34,211,238,0.03)",
           transform: isOpen ? "translateX(0)" : "translateX(-100%)",
           transition: "transform 0.42s cubic-bezier(0.34,1.56,0.64,1)",
           overflowY: "auto",
@@ -146,7 +143,7 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
           animation: "rgb-sidebar-border 4s linear infinite",
         }}
       >
-        {/* Inner reflection */}
+        {/* Inner top reflection */}
         <div
           style={{
             position: "absolute",
@@ -156,6 +153,20 @@ export default function Sidebar({ isDark, onToggleTheme }: SidebarProps) {
             height: "200px",
             background:
               "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Inner bottom reflection */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "100px",
+            background:
+              "linear-gradient(0deg, rgba(42,121,255,0.04) 0%, transparent 100%)",
             pointerEvents: "none",
           }}
         />

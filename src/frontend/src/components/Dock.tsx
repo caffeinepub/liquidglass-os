@@ -137,19 +137,19 @@ export default function Dock({ isDark, onScrollTo }: DockProps) {
           className="rounded-3xl"
           style={{
             background: isDark
-              ? "rgba(8,10,22,0.55)"
-              : "rgba(255,255,255,0.48)",
+              ? "rgba(4, 6, 22, 0.58)"
+              : "rgba(255,255,255,0.52)",
             backdropFilter: isDark
-              ? "blur(60px) saturate(220%) brightness(0.78)"
-              : "blur(60px) saturate(200%) brightness(1.08)",
+              ? "blur(50px) saturate(260%) brightness(0.82)"
+              : "blur(50px) saturate(200%) brightness(1.08)",
             WebkitBackdropFilter: isDark
-              ? "blur(60px) saturate(220%) brightness(0.78)"
-              : "blur(60px) saturate(200%) brightness(1.08)",
+              ? "blur(50px) saturate(260%) brightness(0.82)"
+              : "blur(50px) saturate(200%) brightness(1.08)",
             border: isDark
               ? "1px solid rgba(255,255,255,0.12)"
               : "1px solid rgba(255,255,255,0.82)",
             boxShadow: isDark
-              ? "0 32px 80px rgba(0,0,0,0.6), 0 8px 24px rgba(0,0,0,0.4), inset 0 1.5px 0 rgba(255,255,255,0.18), inset 0 -1.5px 0 rgba(0,0,0,0.3)"
+              ? "0 12px 48px rgba(0,0,0,0.65), 0 0 60px rgba(34,211,238,0.12), 0 0 100px rgba(42,121,255,0.08), inset 0 1.5px 0 rgba(255,255,255,0.18), inset 0 -1.5px 0 rgba(0,0,0,0.22)"
               : "0 24px 64px rgba(100,120,200,0.2), inset 0 1.5px 0 rgba(255,255,255,0.95)",
             padding: "10px 16px",
             transitionTimingFunction: "cubic-bezier(0.175, 0.885, 0.32, 2.2)",

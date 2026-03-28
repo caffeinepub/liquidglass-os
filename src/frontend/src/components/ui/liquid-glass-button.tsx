@@ -175,7 +175,10 @@ type ColorVariant =
   | "success"
   | "error"
   | "gold"
-  | "bronze";
+  | "bronze"
+  | "cyan"
+  | "purple"
+  | "blue";
 
 interface MetalButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -234,6 +237,46 @@ const colorVariants: Record<
     textColor: "text-[#FFF7F0]",
     textShadow: "[text-shadow:_0_-1px_0_rgb(124_45_18_/_100%)]",
   },
+  cyan: {
+    outer: "bg-gradient-to-b from-[#003d5a] to-[#00d4ff]",
+    inner: "bg-gradient-to-b from-[#7df9ff] via-[#006688] to-[#00d4ff]",
+    button: "bg-gradient-to-b from-[#00d4ff] to-[#0099bb]",
+    textColor: "text-white",
+    textShadow: "[text-shadow:_0_-1px_0_rgb(0_80_100_/_100%)]",
+  },
+  purple: {
+    outer: "bg-gradient-to-b from-[#2d0060] to-[#bf5fff]",
+    inner: "bg-gradient-to-b from-[#e0b0ff] via-[#5a0090] to-[#d49aff]",
+    button: "bg-gradient-to-b from-[#bf5fff] to-[#8b00e8]",
+    textColor: "text-white",
+    textShadow: "[text-shadow:_0_-1px_0_rgb(60_0_120_/_100%)]",
+  },
+  blue: {
+    outer: "bg-gradient-to-b from-[#00156a] to-[#2A79FF]",
+    inner: "bg-gradient-to-b from-[#7aafff] via-[#0040bb] to-[#a0c4ff]",
+    button: "bg-gradient-to-b from-[#2A79FF] to-[#1a55cc]",
+    textColor: "text-white",
+    textShadow: "[text-shadow:_0_-1px_0_rgb(0_30_120_/_100%)]",
+  },
+};
+
+const glowByVariant: Record<string, { base: string; hovered: string }> = {
+  cyan: {
+    base: "0 0 20px rgba(0,212,255,0.5), 0 0 40px rgba(0,212,255,0.2)",
+    hovered: "0 0 30px rgba(0,212,255,0.8), 0 0 60px rgba(0,212,255,0.35)",
+  },
+  purple: {
+    base: "0 0 20px rgba(191,95,255,0.5), 0 0 40px rgba(191,95,255,0.2)",
+    hovered: "0 0 30px rgba(191,95,255,0.8), 0 0 60px rgba(191,95,255,0.35)",
+  },
+  blue: {
+    base: "0 0 20px rgba(42,121,255,0.5), 0 0 40px rgba(42,121,255,0.2)",
+    hovered: "0 0 30px rgba(42,121,255,0.8), 0 0 60px rgba(42,121,255,0.35)",
+  },
+  error: {
+    base: "0 0 20px rgba(255,45,85,0.5), 0 0 40px rgba(255,45,85,0.2)",
+    hovered: "0 0 30px rgba(255,45,85,0.8), 0 0 60px rgba(255,45,85,0.35)",
+  },
 };
 
 const metalButtonVariants = (
@@ -244,6 +287,16 @@ const metalButtonVariants = (
 ) => {
   const colors = colorVariants[variant];
   const transitionStyle = "all 250ms cubic-bezier(0.1, 0.4, 0.2, 1)";
+  const glow = glowByVariant[variant];
+
+  let boxShadow: string;
+  if (isPressed) {
+    boxShadow = "0 1px 2px rgba(0, 0, 0, 0.15)";
+  } else if (isHovered && !isTouchDevice) {
+    boxShadow = glow ? glow.hovered : "0 4px 12px rgba(0, 0, 0, 0.12)";
+  } else {
+    boxShadow = glow ? glow.base : "0 3px 8px rgba(0, 0, 0, 0.08)";
+  }
 
   return {
     wrapper: cn(
@@ -254,11 +307,7 @@ const metalButtonVariants = (
       transform: isPressed
         ? "translateY(2.5px) scale(0.99)"
         : "translateY(0) scale(1)",
-      boxShadow: isPressed
-        ? "0 1px 2px rgba(0, 0, 0, 0.15)"
-        : isHovered && !isTouchDevice
-          ? "0 4px 12px rgba(0, 0, 0, 0.12)"
-          : "0 3px 8px rgba(0, 0, 0, 0.08)",
+      boxShadow,
       transition: transitionStyle,
       transformOrigin: "center center",
     },

@@ -1,4 +1,4 @@
-import { Activity, ArrowRight, Cpu, Gauge, Zap } from "lucide-react";
+import { Activity, Cpu, Gauge, Play, ShieldCheck, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DiscordPopup from "./DiscordPopup";
 import { LiquidButton, MetalButton } from "./ui/liquid-glass-button";
@@ -21,9 +21,7 @@ function AnimatedBar({ target, color }: { target: number; color: string }) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setWidth(target), 300);
-        }
+        if (entry.isIntersecting) setTimeout(() => setWidth(target), 300);
       },
       { threshold: 0.1 },
     );
@@ -34,7 +32,7 @@ function AnimatedBar({ target, color }: { target: number; color: string }) {
   return (
     <div
       ref={ref}
-      className="h-1.5 rounded-full overflow-hidden"
+      className="h-1 rounded-full overflow-hidden"
       style={{ background: "rgba(255,255,255,0.07)" }}
     >
       <div
@@ -42,16 +40,14 @@ function AnimatedBar({ target, color }: { target: number; color: string }) {
         style={{
           width: `${width}%`,
           background: `linear-gradient(90deg, ${color}, ${color}99)`,
-          boxShadow: `0 0 12px ${color}90`,
+          boxShadow: `0 0 10px ${color}90`,
         }}
       />
     </div>
   );
 }
 
-function ServerMetricCard({
-  className,
-  style,
+function FloatingStat({
   icon: Icon,
   title,
   value,
@@ -59,44 +55,41 @@ function ServerMetricCard({
   barValue,
   barColor,
   iconColor,
+  className,
+  style,
 }: {
-  className?: string;
-  style?: React.CSSProperties;
   icon: React.ElementType;
   title: string;
   value: string;
-  sub?: string;
+  sub: string;
   barValue?: number;
   barColor?: string;
-  iconColor?: string;
+  iconColor: string;
+  className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <div
-      className={`glass-card glass-card-premium p-4 w-[170px] sm:w-[190px] ${className ?? ""}`}
+      className={`glass-card glass-card-premium p-4 w-[180px] ${className ?? ""}`}
       style={style}
     >
-      <div className="flex items-center gap-2 mb-3">
-        <div className="icon-chip w-8 h-8 rounded-xl">
-          <Icon className="w-4 h-4" style={{ color: iconColor ?? "#FF2D55" }} />
+      <div className="flex items-center gap-2 mb-2">
+        <div className="icon-chip w-7 h-7 rounded-xl">
+          <Icon className="w-3.5 h-3.5" style={{ color: iconColor }} />
         </div>
         <span className="text-xs font-medium" style={{ color: "#B9C3DA" }}>
           {title}
         </span>
       </div>
       <div
-        className="text-xl font-bold tracking-tight mb-1"
+        className="text-lg font-bold tracking-tight mb-0.5"
         style={{ color: "#F4F7FF" }}
       >
         {value}
       </div>
-      {sub && (
-        <div
-          className="text-xs font-medium mb-2"
-          style={{ color: iconColor ?? "#FF2D55" }}
-        >
-          {sub}
-        </div>
-      )}
+      <div className="text-xs font-medium mb-2" style={{ color: iconColor }}>
+        {sub}
+      </div>
       {barValue !== undefined && barColor && (
         <AnimatedBar target={barValue} color={barColor} />
       )}
@@ -104,192 +97,229 @@ function ServerMetricCard({
   );
 }
 
+const TRUST_BADGES = [
+  { label: "Instant Deploy", color: "#FF2D55" },
+  { label: "99.9% Uptime", color: "#00DC64" },
+  { label: "DDoS Protected", color: "#2A79FF" },
+  { label: "180+ Nodes", color: "#7B2FFF" },
+];
+
 export default function Hero() {
-  const panelsRef = useRef<HTMLDivElement>(null);
   const [showDiscord, setShowDiscord] = useState(false);
 
-  useEffect(() => {
-    let rafId: number | null = null;
-    const handleScroll = () => {
-      if (rafId !== null) return;
-      rafId = requestAnimationFrame(() => {
-        const scrollY = window.scrollY;
-        if (panelsRef.current) {
-          panelsRef.current.style.transform = `translateY(${scrollY * 0.12}px)`;
-        }
-        rafId = null;
-      });
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (rafId !== null) cancelAnimationFrame(rafId);
-    };
-  }, []);
-
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-20 px-4">
-      {/* Background glow — blue + purple + pink */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 40% at 20% 80%, rgba(255,45,85,0.1) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 20%, rgba(42,121,255,0.12) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 50% 10%, rgba(139,92,246,0.1) 0%, transparent 60%), radial-gradient(ellipse 30% 25% at 85% 80%, rgba(236,72,153,0.08) 0%, transparent 55%)",
-        }}
-      />
-
-      {/* Floating server metric cards */}
-      <div
-        ref={panelsRef}
-        className="relative w-full max-w-4xl flex justify-center items-end gap-4 mb-[-40px] z-10 px-4"
-        style={{
-          transition: "transform 0.1s linear",
-          willChange: "transform",
-          transform: "translateZ(0)",
-        }}
-      >
-        <ServerMetricCard
-          icon={Cpu}
-          title="CPU Usage"
-          value="23%"
-          sub="4 vCPU active"
-          barValue={23}
-          barColor="#FF2D55"
-          iconColor="#FF2D55"
-          className="fade-up fade-up-delay-1 hidden sm:block card-float card-float-delay-1"
-          style={{ transform: "rotate(-3deg) translateY(10px)" }}
+    <section
+      className="relative min-h-screen flex items-center pt-24 pb-20 px-4 overflow-hidden"
+      data-ocid="hero.section"
+    >
+      {/* Cinematic multi-layer background */}
+      <div className="cinematic-bg">
+        <img
+          src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1920&q=85"
+          alt=""
+          aria-hidden="true"
+          className="cinematic-bg-img"
         />
-        <ServerMetricCard
-          icon={Activity}
-          title="RAM"
-          value="4.2 / 8 GB"
-          sub="52% utilized"
-          barValue={52}
-          barColor="#2A79FF"
-          iconColor="#2A79FF"
-          className="fade-up fade-up-delay-2 scale-110 card-float card-float-delay-2"
-          style={{ zIndex: 2 }}
-        />
-        <ServerMetricCard
-          icon={Gauge}
-          title="Latency"
-          value="1.2ms"
-          sub="Frankfurt, DE"
-          barValue={12}
-          barColor="#7B2FFF"
-          iconColor="#7B2FFF"
-          className="fade-up fade-up-delay-3 hidden sm:block card-float card-float-delay-3"
-          style={{ transform: "rotate(3deg) translateY(10px)" }}
+        {/* Layer 1: Left-to-right dark gradient */}
+        <div className="cinematic-overlay-lr" />
+        {/* Layer 2: Radial vignette */}
+        <div className="cinematic-vignette" />
+        {/* Layer 3: Bottom fade */}
+        <div className="cinematic-overlay-bottom" />
+        {/* Layer 4: Colour tint — matches brand gradient */}
+        <div
+          className="absolute inset-0 pointer-events-none z-[5]"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 80% 40%, rgba(34,211,238,0.07) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 15% 60%, rgba(255,45,85,0.06) 0%, transparent 60%)",
+          }}
         />
       </div>
 
-      {/* Main hero card — glass-ultra + glass-card-premium */}
-      <div
-        className="glass-card glass-ultra glass-card-premium w-full max-w-3xl p-8 md:p-14 text-center z-20 fade-up"
-        data-ocid="hero.card"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(42,121,255,0.04) 0%, rgba(8,10,24,0.42) 40%, rgba(139,92,246,0.03) 70%, rgba(34,211,238,0.02) 100%)",
-        }}
-      >
-        {/* Badge pill */}
-        <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-pill text-xs font-semibold mb-6"
-          style={{
-            background: "rgba(255,45,85,0.12)",
-            border: "1px solid rgba(255,45,85,0.28)",
-            color: "#FF6B7A",
-          }}
-        >
-          <span
-            className="w-1.5 h-1.5 rounded-full animate-pulse"
-            style={{
-              background: "#FF2D55",
-              boxShadow: "0 0 8px #FF2D55",
-            }}
-          />
-          Instant Deploy — 99.9% Uptime
-        </div>
-
-        <h1
-          className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] tracking-[-0.02em] mb-6"
-          style={{ color: "#F4F7FF" }}
-        >
-          High Performance <br className="hidden sm:block" />
-          Minecraft Servers{" "}
-          <span
-            style={{
-              background:
-                "linear-gradient(135deg, #FF2D55 0%, #2A79FF 50%, #00DC64 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
+      <div className="relative max-w-7xl mx-auto w-full">
+        <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-12 lg:gap-16">
+          {/* ── LEFT: Content ── */}
+          <div
+            className="flex-1 flex flex-col justify-center fade-up"
+            style={{ maxWidth: 620 }}
           >
-            Deploy in Seconds.
-          </span>
-        </h1>
-
-        <p
-          className="text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-8"
-          style={{ color: "#B9C3DA" }}
-        >
-          Buy powerful Minecraft nodes with instant deploy. DDoS protection,
-          custom mods, and global locations.
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          {/* Primary button */}
-          <div style={{ position: "relative" }}>
-            <MetalButton
-              data-ocid="hero.cta.primary_button"
-              onClick={(e) => {
-                ripple(e as React.MouseEvent<HTMLButtonElement>);
-                setShowDiscord((v) => !v);
-              }}
-            >
-              <Zap className="w-4 h-4" fill="currentColor" />
-              Buy Server
-            </MetalButton>
-            {showDiscord && (
-              <DiscordPopup onClose={() => setShowDiscord(false)} />
-            )}
-          </div>
-          <LiquidButton
-            size="lg"
-            data-ocid="hero.cta.secondary_button"
-            onClick={ripple as React.MouseEventHandler<HTMLButtonElement>}
-            className="rounded-full px-8 py-3.5 text-sm font-semibold text-white/90"
-          >
-            View Plans
-            <ArrowRight className="w-4 h-4" />
-          </LiquidButton>
-        </div>
-
-        {/* Trust badges */}
-        <div
-          className="flex flex-wrap items-center justify-center gap-6 mt-8 pt-6"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
-        >
-          {(
-            [
-              "Instant Deploy",
-              "99.9% Uptime",
-              "180+ Minecraft Nodes",
-              "DDoS Protected",
-            ] as string[]
-          ).map((badge) => (
+            {/* Live badge */}
             <div
-              key={badge}
-              className="flex items-center gap-1.5 text-sm font-medium"
-              style={{ color: "#FF6B7A" }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill text-xs font-bold mb-6 self-start"
+              style={{
+                background: "rgba(255,45,85,0.12)",
+                border: "1px solid rgba(255,45,85,0.3)",
+                color: "#FF6B7A",
+              }}
+              data-ocid="hero.live.badge"
             >
               <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: "#FF2D55", boxShadow: "0 0 6px #FF2D55" }}
+                className="w-2 h-2 rounded-full animate-pulse"
+                style={{ background: "#FF2D55", boxShadow: "0 0 8px #FF2D55" }}
               />
-              {badge}
+              🔴 LIVE · 247 Servers Online
             </div>
-          ))}
+
+            {/* Title */}
+            <h1
+              className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.05] tracking-[-0.02em] mb-4"
+              style={{ color: "#F4F7FF" }}
+              data-ocid="hero.title"
+            >
+              High Performance <br className="hidden sm:block" />
+              Minecraft Servers
+            </h1>
+
+            {/* Gradient subtitle */}
+            <div
+              className="text-3xl sm:text-4xl font-extrabold mb-5 tracking-tight"
+              style={{
+                background:
+                  "linear-gradient(135deg, #FF2D55 0%, #2A79FF 50%, #00DC64 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Deploy in Seconds.
+            </div>
+
+            {/* Description */}
+            <p
+              className="text-base md:text-lg leading-relaxed mb-8 max-w-lg"
+              style={{ color: "#B9C3DA" }}
+            >
+              Launch powerful Minecraft servers with instant deploy, DDoS
+              protection, and full control. Global nodes, custom mods, and 99.9%
+              uptime.
+            </p>
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
+              <div style={{ position: "relative" }}>
+                <MetalButton
+                  data-ocid="hero.deploy.primary_button"
+                  variant="error"
+                  onClick={(e) => {
+                    ripple(e as React.MouseEvent<HTMLButtonElement>);
+                    setShowDiscord((v) => !v);
+                  }}
+                >
+                  🚀 Deploy Server
+                </MetalButton>
+                {showDiscord && (
+                  <DiscordPopup onClose={() => setShowDiscord(false)} />
+                )}
+              </div>
+
+              <LiquidButton
+                size="lg"
+                data-ocid="hero.dashboard.secondary_button"
+                onClick={ripple as React.MouseEventHandler<HTMLButtonElement>}
+                className="rounded-full px-7 py-3 text-sm font-semibold"
+                style={{ color: "rgba(255,255,255,0.9)" }}
+              >
+                📊 Dashboard
+              </LiquidButton>
+            </div>
+
+            {/* Trust row */}
+            <div
+              className="flex flex-wrap items-center gap-5 pt-5"
+              style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+            >
+              {TRUST_BADGES.map((b) => (
+                <div
+                  key={b.label}
+                  className="flex items-center gap-1.5 text-sm font-medium"
+                  style={{ color: b.color }}
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  {b.label}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── RIGHT: Stats + Play button ── */}
+          <div
+            className="hidden lg:flex flex-col items-center justify-center gap-4 flex-shrink-0 fade-up"
+            style={{ minWidth: 260, position: "relative" }}
+          >
+            {/* CPU stat */}
+            <FloatingStat
+              icon={Cpu}
+              title="CPU Usage"
+              value="23%"
+              sub="4 vCPU active"
+              barValue={23}
+              barColor="#FF2D55"
+              iconColor="#FF2D55"
+              className="card-float card-float-delay-1 self-start"
+              style={{ transform: "rotate(-3deg) translateX(-20px)" }}
+            />
+
+            {/* Large circular play button */}
+            <button
+              type="button"
+              className="relative flex items-center justify-center rounded-full transition-all duration-300 hover:scale-110 card-float card-float-delay-2"
+              style={{
+                width: 88,
+                height: 88,
+                background: "rgba(34,211,238,0.08)",
+                border: "2px solid rgba(34,211,238,0.45)",
+                boxShadow:
+                  "0 0 32px rgba(34,211,238,0.35), 0 0 60px rgba(34,211,238,0.15), inset 0 1px 0 rgba(255,255,255,0.15)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+              }}
+              data-ocid="hero.explore.button"
+              aria-label="Explore servers"
+            >
+              <Play
+                className="w-9 h-9"
+                style={{
+                  color: "#22D3EE",
+                  filter: "drop-shadow(0 0 8px #22D3EE)",
+                  marginLeft: 4,
+                }}
+                fill="#22D3EE"
+              />
+              {/* Ring pulse */}
+              <span
+                className="absolute inset-0 rounded-full animate-ping"
+                style={{
+                  border: "1px solid rgba(34,211,238,0.3)",
+                  animationDuration: "2s",
+                }}
+              />
+            </button>
+
+            {/* RAM stat */}
+            <FloatingStat
+              icon={Activity}
+              title="RAM"
+              value="4.2 / 8 GB"
+              sub="52% utilized"
+              barValue={52}
+              barColor="#2A79FF"
+              iconColor="#2A79FF"
+              className="card-float card-float-delay-3 self-end"
+              style={{ transform: "rotate(3deg) translateX(20px)" }}
+            />
+
+            {/* Latency stat */}
+            <FloatingStat
+              icon={Gauge}
+              title="Latency"
+              value="1.2ms"
+              sub="Frankfurt, DE"
+              barValue={12}
+              barColor="#7B2FFF"
+              iconColor="#7B2FFF"
+              className="card-float card-float-delay-4 self-start"
+              style={{ transform: "rotate(-2deg) translateX(-10px)" }}
+            />
+          </div>
         </div>
       </div>
     </section>
