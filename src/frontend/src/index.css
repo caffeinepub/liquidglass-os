@@ -1345,3 +1345,17 @@ html.light [data-beams-bg]::after {
   z-index: 10;
   pointer-events: none;
 }
+
+/* ── Star Button Animation ── */
+@theme inline {
+  --animate-star-btn: star-btn calc(var(--duration, 3) * 1s) linear infinite;
+}
+
+@keyframes star-btn {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}

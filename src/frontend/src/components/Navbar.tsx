@@ -1,11 +1,9 @@
 import { Menu, Moon, Server, Sun, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DiscordPopup from "./DiscordPopup";
-import { MetalButton } from "./ui/liquid-glass-button";
 
 const NAV_LINKS = ["Home", "Plans", "Servers", "Pricing", "Dashboard", "Login"];
-const LOGIN_URL =
-  "https://promising-white-eki-draft.caffeine.xyz/#caffeineAdminToken=f12ce17017d65b5dd5d901732fb1d643f5031208a4346356ee7e8a9050dc7f80";
+const LOGIN_URL = "https://login-o9c.caffeine.xyz/";
 
 interface NavbarProps {
   isDark: boolean;
@@ -26,29 +24,19 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
   }, []);
 
   return (
-    <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
-      {/* Soft aura glow layer above the navbar */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-20px",
-          left: 0,
-          right: 0,
-          height: "80px",
-          background:
-            "linear-gradient(180deg, rgba(42,121,255,0.06) 0%, rgba(139,92,246,0.04) 50%, transparent 100%)",
-          pointerEvents: "none",
-          zIndex: -1,
-        }}
-      />
+    <header
+      className="fixed top-0 left-0 right-0 z-50"
+      style={{
+        background: scrolled ? "rgba(0,0,0,0.75)" : "rgba(0,0,0,0.55)",
+        backdropFilter: "blur(24px) saturate(200%)",
+        WebkitBackdropFilter: "blur(24px) saturate(200%)",
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        boxShadow: scrolled ? "0 4px 24px rgba(0,0,0,0.5)" : "none",
+        transition: "background 0.3s ease, box-shadow 0.3s ease",
+      }}
+    >
       <nav
-        className="glass-nav rounded-pill flex items-center justify-between gap-4 px-5 h-[62px] w-full max-w-[780px] transition-all duration-200"
-        style={{
-          boxShadow: scrolled
-            ? "0 12px 48px rgba(0,0,0,0.5), 0 0 60px rgba(42,121,255,0.12), inset 0 1px 0 rgba(255,255,255,0.14)"
-            : undefined,
-          animation: "nav-glow-pulse 3s ease-in-out infinite",
-        }}
+        className="flex items-center justify-between gap-4 px-5 h-[60px] max-w-7xl mx-auto"
         data-ocid="nav.panel"
       >
         {/* Brand */}
@@ -178,13 +166,14 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
           </button>
 
           <div ref={ctaRef} style={{ position: "relative" }}>
-            <MetalButton
+            <button
+              type="button"
               data-ocid="nav.cta.button"
               onClick={() => setShowDiscord((v) => !v)}
-              className="hidden sm:inline-flex"
+              className="btn-glow hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold"
             >
               Buy Server
-            </MetalButton>
+            </button>
             {showDiscord && (
               <DiscordPopup onClose={() => setShowDiscord(false)} />
             )}
@@ -209,7 +198,12 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
       {/* Mobile menu */}
       {menuOpen && (
         <div
-          className="glass-nav absolute top-[72px] left-4 right-4 rounded-3xl p-4 flex flex-col gap-2"
+          className="absolute top-[60px] left-0 right-0 p-4 flex flex-col gap-2"
+          style={{
+            background: "rgba(0,0,0,0.85)",
+            backdropFilter: "blur(24px)",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+          }}
           data-ocid="nav.mobile.panel"
         >
           {NAV_LINKS.map((link) => {
@@ -255,9 +249,13 @@ export default function Navbar({ isDark, onToggleTheme }: NavbarProps) {
             );
           })}
           <div className="mt-2 w-full flex justify-center">
-            <MetalButton data-ocid="nav.mobile.cta.button">
+            <button
+              type="button"
+              data-ocid="nav.mobile.cta.button"
+              className="btn-glow inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold"
+            >
               Buy Server
-            </MetalButton>
+            </button>
           </div>
         </div>
       )}

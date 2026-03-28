@@ -1,6 +1,7 @@
 import { RefreshCw, Shield, Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { GlowCard } from "./ui/spotlight-card";
+import { StarButton } from "./ui/star-button";
 
 function AnimatedMetricBar({
   label,
@@ -56,6 +57,27 @@ function AnimatedMetricBar({
   );
 }
 
+const QUICK_ACTIONS = [
+  {
+    icon: RefreshCw,
+    label: "Restart",
+    color: "#22E6FF",
+    lightColor: "#22E6FF" as const,
+  },
+  {
+    icon: Terminal,
+    label: "Console",
+    color: "#2A79FF",
+    lightColor: "#2A79FF" as const,
+  },
+  {
+    icon: Shield,
+    label: "Firewall",
+    color: "#B14CFF",
+    lightColor: "#B14CFF" as const,
+  },
+];
+
 export default function Dashboard() {
   return (
     <section className="py-20 px-4" data-ocid="dashboard.section">
@@ -86,7 +108,7 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* Dashboard panel — glass-ultra for max depth */}
+        {/* Dashboard panel */}
         <div
           className="neon-border rounded-3xl fade-up"
           style={{ borderRadius: "24px" }}
@@ -94,9 +116,7 @@ export default function Dashboard() {
         >
           <div
             className="glass-ultra rounded-3xl overflow-hidden"
-            style={{
-              border: "1px solid rgba(255,255,255,0.12)",
-            }}
+            style={{ border: "1px solid rgba(255,255,255,0.12)" }}
           >
             <div className="p-5 md:p-8">
               {/* Server header */}
@@ -211,7 +231,6 @@ export default function Dashboard() {
                   </div>
                 </GlowCard>
 
-                {/* Network stats */}
                 <GlowCard
                   customSize={true}
                   glowColor="purple"
@@ -266,7 +285,6 @@ export default function Dashboard() {
                   </div>
                 </GlowCard>
 
-                {/* Quick actions */}
                 <GlowCard
                   customSize={true}
                   glowColor="blue"
@@ -279,41 +297,16 @@ export default function Dashboard() {
                     Quick Actions
                   </div>
                   <div className="flex flex-col gap-3">
-                    {[
-                      { icon: RefreshCw, label: "Restart", color: "#22E6FF" },
-                      { icon: Terminal, label: "Console", color: "#2A79FF" },
-                      { icon: Shield, label: "Firewall", color: "#B14CFF" },
-                    ].map(({ icon: Icon, label, color }) => (
-                      <button
+                    {QUICK_ACTIONS.map(({ icon: Icon, label, lightColor }) => (
+                      <StarButton
                         key={label}
-                        type="button"
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
-                        style={{
-                          background: "rgba(255,255,255,0.05)",
-                          border: "1px solid rgba(255,255,255,0.10)",
-                          color: "#B9C3DA",
-                        }}
-                        onMouseEnter={(e) => {
-                          const el = e.currentTarget as HTMLButtonElement;
-                          el.style.borderColor = `${color}55`;
-                          el.style.color = color;
-                          el.style.boxShadow = `0 0 18px ${color}30`;
-                          el.style.transform = "scale(1.02)";
-                          el.style.background = `${color}0d`;
-                        }}
-                        onMouseLeave={(e) => {
-                          const el = e.currentTarget as HTMLButtonElement;
-                          el.style.borderColor = "rgba(255,255,255,0.10)";
-                          el.style.color = "#B9C3DA";
-                          el.style.boxShadow = "none";
-                          el.style.transform = "";
-                          el.style.background = "rgba(255,255,255,0.05)";
-                        }}
+                        lightColor={lightColor}
+                        className="w-full justify-start gap-3 px-3 py-2.5 rounded-xl h-auto text-sm font-medium"
                         data-ocid={`dashboard.${label.toLowerCase()}.button`}
                       >
                         <Icon className="w-4 h-4" />
                         {label}
-                      </button>
+                      </StarButton>
                     ))}
                   </div>
                 </GlowCard>

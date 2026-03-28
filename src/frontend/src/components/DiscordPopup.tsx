@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { MetalButton } from "./ui/liquid-glass-button";
+import { StarButton } from "./ui/star-button";
 
 interface DiscordPopupProps {
   onClose: () => void;
@@ -152,9 +152,11 @@ export default function DiscordPopup({ onClose }: DiscordPopupProps) {
 
       {/* CTA Button */}
       <div className="w-full flex justify-center">
-        <MetalButton
+        <StarButton
+          lightColor="#FAFAFA"
           onClick={() => window.open("https://discord.gg/darksanta", "_blank")}
           data-ocid="discord.open_modal_button"
+          className="px-5"
         >
           <svg
             width="16"
@@ -167,7 +169,7 @@ export default function DiscordPopup({ onClose }: DiscordPopupProps) {
             <path d={DISCORD_PATH} fill="white" />
           </svg>
           Open Discord
-        </MetalButton>
+        </StarButton>
       </div>
 
       <style>{`

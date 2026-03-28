@@ -1,7 +1,6 @@
 import { Activity, Cpu, Gauge, Play, ShieldCheck, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DiscordPopup from "./DiscordPopup";
-import { LiquidButton, MetalButton } from "./ui/liquid-glass-button";
 
 function ripple(e: React.MouseEvent<HTMLButtonElement>) {
   const btn = e.currentTarget;
@@ -120,13 +119,9 @@ export default function Hero() {
           aria-hidden="true"
           className="cinematic-bg-img"
         />
-        {/* Layer 1: Left-to-right dark gradient */}
         <div className="cinematic-overlay-lr" />
-        {/* Layer 2: Radial vignette */}
         <div className="cinematic-vignette" />
-        {/* Layer 3: Bottom fade */}
         <div className="cinematic-overlay-bottom" />
-        {/* Layer 4: Colour tint — matches brand gradient */}
         <div
           className="absolute inset-0 pointer-events-none z-[5]"
           style={{
@@ -196,30 +191,30 @@ export default function Hero() {
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
               <div style={{ position: "relative" }}>
-                <MetalButton
+                <button
+                  type="button"
                   data-ocid="hero.deploy.primary_button"
-                  variant="error"
                   onClick={(e) => {
                     ripple(e as React.MouseEvent<HTMLButtonElement>);
                     setShowDiscord((v) => !v);
                   }}
+                  className="btn-glow relative overflow-hidden inline-flex items-center gap-2 px-6 py-2.5 h-11 rounded-full text-sm font-bold"
                 >
                   🚀 Deploy Server
-                </MetalButton>
+                </button>
                 {showDiscord && (
                   <DiscordPopup onClose={() => setShowDiscord(false)} />
                 )}
               </div>
 
-              <LiquidButton
-                size="lg"
+              <button
+                type="button"
                 data-ocid="hero.dashboard.secondary_button"
                 onClick={ripple as React.MouseEventHandler<HTMLButtonElement>}
-                className="rounded-full px-7 py-3 text-sm font-semibold"
-                style={{ color: "rgba(255,255,255,0.9)" }}
+                className="btn-glass relative overflow-hidden inline-flex items-center gap-2 px-6 py-2.5 h-11 rounded-full text-sm font-bold"
               >
                 📊 Dashboard
-              </LiquidButton>
+              </button>
             </div>
 
             {/* Trust row */}
@@ -245,7 +240,6 @@ export default function Hero() {
             className="hidden lg:flex flex-col items-center justify-center gap-4 flex-shrink-0 fade-up"
             style={{ minWidth: 260, position: "relative" }}
           >
-            {/* CPU stat */}
             <FloatingStat
               icon={Cpu}
               title="CPU Usage"
@@ -284,7 +278,6 @@ export default function Hero() {
                 }}
                 fill="#22D3EE"
               />
-              {/* Ring pulse */}
               <span
                 className="absolute inset-0 rounded-full animate-ping"
                 style={{
@@ -294,7 +287,6 @@ export default function Hero() {
               />
             </button>
 
-            {/* RAM stat */}
             <FloatingStat
               icon={Activity}
               title="RAM"
@@ -307,7 +299,6 @@ export default function Hero() {
               style={{ transform: "rotate(3deg) translateX(20px)" }}
             />
 
-            {/* Latency stat */}
             <FloatingStat
               icon={Gauge}
               title="Latency"

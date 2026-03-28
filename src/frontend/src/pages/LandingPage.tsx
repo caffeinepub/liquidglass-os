@@ -1,5 +1,4 @@
 import { CinematicHero } from "../components/ui/cinematic-landing-hero";
-import { MetalButton } from "../components/ui/liquid-glass-button";
 
 const PARTICLES = [
   {
@@ -251,7 +250,6 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
           pointerEvents: "none",
         }}
       >
-        {/* Top-left cyan mega orb */}
         <div
           style={{
             position: "absolute",
@@ -266,7 +264,6 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
             animation: "floatA 9s ease-in-out infinite",
           }}
         />
-        {/* Bottom-right purple mega orb */}
         <div
           style={{
             position: "absolute",
@@ -281,7 +278,6 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
             animation: "floatB 11s ease-in-out infinite",
           }}
         />
-        {/* Center electric cyan orb */}
         <div
           style={{
             position: "absolute",
@@ -296,7 +292,6 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
             animation: "floatC 7s ease-in-out infinite 1.5s",
           }}
         />
-        {/* Top-right hot pink accent */}
         <div
           style={{
             position: "absolute",
@@ -311,7 +306,6 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
             animation: "floatA 13s ease-in-out infinite 3s",
           }}
         />
-        {/* Bottom-left teal */}
         <div
           style={{
             position: "absolute",
@@ -435,38 +429,12 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
 
       {/* Keyframes */}
       <style>{`
-        @keyframes floatA {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -40px) scale(1.05); }
-          66% { transform: translate(-20px, 20px) scale(0.97); }
-        }
-        @keyframes floatB {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          40% { transform: translate(-40px, -30px) scale(1.08); }
-          70% { transform: translate(25px, 35px) scale(0.95); }
-        }
-        @keyframes floatC {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.8; }
-          50% { transform: translate(20px, -25px) scale(1.1); opacity: 1; }
-        }
-        @keyframes particleFloat {
-          0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
-          50% { transform: translateY(-20px) scale(1.3); opacity: 1; }
-        }
-        @keyframes spinRing {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes beamSweep {
-          0% { left: -100%; opacity: 0; }
-          10% { opacity: 1; }
-          80% { opacity: 1; }
-          100% { left: 150%; opacity: 0; }
-        }
-        @keyframes btnGlow {
-          0%, 100% { box-shadow: 0 0 30px rgba(0,212,255,0.4), 0 0 60px rgba(0,212,255,0.15), inset 0 1px 1px rgba(255,255,255,0.2); }
-          50% { box-shadow: 0 0 50px rgba(0,212,255,0.7), 0 0 100px rgba(0,212,255,0.3), inset 0 1px 1px rgba(255,255,255,0.25); }
-        }
+        @keyframes floatA { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -40px) scale(1.05); } 66% { transform: translate(-20px, 20px) scale(0.97); } }
+        @keyframes floatB { 0%, 100% { transform: translate(0, 0) scale(1); } 40% { transform: translate(-40px, -30px) scale(1.08); } 70% { transform: translate(25px, 35px) scale(0.95); } }
+        @keyframes floatC { 0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.8; } 50% { transform: translate(20px, -25px) scale(1.1); opacity: 1; } }
+        @keyframes particleFloat { 0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; } 50% { transform: translateY(-20px) scale(1.3); opacity: 1; } }
+        @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes beamSweep { 0% { left: -100%; opacity: 0; } 10% { opacity: 1; } 80% { opacity: 1; } 100% { left: 150%; opacity: 0; } }
       `}</style>
 
       {/* Subtle scrim */}
@@ -503,10 +471,11 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
 
       {/* Enter Site button */}
       <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto">
-        <MetalButton
+        <button
+          type="button"
           data-ocid="landing.enter_site_button"
-          variant="cyan"
           onClick={onEnter}
+          className="btn-glow relative overflow-hidden inline-flex items-center gap-2 px-8 py-3 h-12 rounded-full text-base font-bold"
         >
           Enter DarkSanta
           <svg
@@ -523,7 +492,7 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
               d="M5 12h14M12 5l7 7-7 7"
             />
           </svg>
-        </MetalButton>
+        </button>
       </div>
     </div>
   );
