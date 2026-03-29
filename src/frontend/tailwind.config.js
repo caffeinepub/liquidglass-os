@@ -10,13 +10,11 @@ export default {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      screens: { "2xl": "1400px" },
     },
     extend: {
       fontFamily: {
-        sans: ["-apple-system", "BlinkMacSystemFont", "SF Pro Display", "SF Pro Text", "Inter", "system-ui", "sans-serif"],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "oklch(var(--border))",
@@ -69,19 +67,6 @@ export default {
           border: "oklch(var(--sidebar-border))",
           ring: "oklch(var(--sidebar-ring))",
         },
-        aether: {
-          cyan: "#22E6FF",
-          "cyan-bright": "#6FF4FF",
-          blue: "#2A79FF",
-          violet: "#B14CFF",
-          "violet-deep": "#8A3CFF",
-          navy: "#060713",
-          "navy-mid": "#07142A",
-          "navy-light": "#06233A",
-          "text-primary": "#F4F7FF",
-          "text-secondary": "#B9C3DA",
-          "text-muted": "#7E8AA8",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -90,14 +75,6 @@ export default {
         "2xl": "20px",
         "3xl": "28px",
         "4xl": "36px",
-        pill: "999px",
-      },
-      boxShadow: {
-        xs: "0 1px 2px 0 rgba(0,0,0,0.05)",
-        glass: "0 20px 60px rgba(0,0,0,0.45), 0 2px 0 rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.10)",
-        glow: "0 0 40px rgba(34, 230, 255, 0.35)",
-        "glow-violet": "0 0 40px rgba(177, 76, 255, 0.35)",
-        "glow-sm": "0 0 20px rgba(34, 230, 255, 0.25)",
       },
       keyframes: {
         "accordion-down": {
@@ -108,21 +85,10 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "neon-pulse": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.6" },
-        },
-        "float": {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "neon-pulse": "neon-pulse 3s ease-in-out infinite",
-        "float": "float 4s ease-in-out infinite",
-        "float-slow": "float 6s ease-in-out infinite",
       },
     },
   },
