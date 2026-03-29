@@ -133,7 +133,7 @@ function NodeCard({ node, index }: { node: (typeof nodes)[0]; index: number }) {
 
 export default function NodesPage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#050505" }}>
+    <div className="min-h-screen">
       <Navbar />
       <main className="pt-24 pb-28 px-6">
         <div className="max-w-5xl mx-auto">

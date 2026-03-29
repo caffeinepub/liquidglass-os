@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BeamsBackground } from "./components/ui/beams-background";
 import MainSitePage from "./pages/MainSitePage";
 import NodesPage from "./pages/NodesPage";
 
@@ -17,6 +18,10 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  if (route === "nodes") return <NodesPage />;
-  return <MainSitePage />;
+  return (
+    <>
+      <BeamsBackground intensity="medium" />
+      {route === "nodes" ? <NodesPage /> : <MainSitePage />}
+    </>
+  );
 }

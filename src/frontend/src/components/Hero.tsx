@@ -1,4 +1,5 @@
-import { Activity, Cpu, Gauge, Play, ShieldCheck, Zap } from "lucide-react";
+import { EtheralShadow } from "@/components/ui/etheral-shadow";
+import { Activity, Cpu, Gauge, Play, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DiscordPopup from "./DiscordPopup";
 
@@ -111,6 +112,16 @@ export default function Hero() {
       className="relative min-h-screen flex items-center pt-24 pb-20 px-4 overflow-hidden"
       data-ocid="hero.section"
     >
+      {/* EtheralShadow — animated depth layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <EtheralShadow
+          color="rgba(59, 130, 246, 0.15)"
+          animation={{ scale: 60, speed: 70 }}
+          noise={{ opacity: 0.3, scale: 1.2 }}
+          sizing="fill"
+        />
+      </div>
+
       {/* Cinematic multi-layer background */}
       <div className="cinematic-bg">
         <img
@@ -131,7 +142,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative max-w-7xl mx-auto w-full">
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-12 lg:gap-16">
           {/* ── LEFT: Content ── */}
           <div

@@ -18,7 +18,7 @@ export default function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-6 h-16 relative flex items-center justify-between">
         {/* Logo */}
         <a
           data-ocid="navbar.link"
@@ -31,8 +31,8 @@ export default function Navbar() {
           <span className="w-1.5 h-1.5 rounded-full bg-blue-500 group-hover:shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-shadow" />
         </a>
 
-        {/* Center nav */}
-        <nav className="hidden md:flex items-center gap-1">
+        {/* Center nav — absolutely centered */}
+        <nav className="hidden md:flex items-center gap-1 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           {[
             { label: "Home", href: "#/home" },
             { label: "Plans", href: "#plans" },

@@ -51,7 +51,7 @@ export default function BottomDock() {
       <div className="absolute -top-12 left-0 right-0 h-12 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
 
       <div className="bg-black/60 backdrop-blur-md border-t border-white/[0.08] h-16">
-        <div className="max-w-sm mx-auto h-full flex items-center justify-center">
+        <div className="max-w-lg mx-auto h-full flex items-center">
           <LimelightNav
             items={items}
             defaultActiveIndex={activeIndex}

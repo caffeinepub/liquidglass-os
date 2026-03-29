@@ -116,7 +116,7 @@ export const LimelightNav = ({
 
   return (
     <nav
-      className={`relative inline-flex items-center h-16 rounded-lg bg-card text-foreground border px-2 ${className ?? ""}`}
+      className={`relative flex w-full items-center h-16 rounded-lg bg-card text-foreground border px-2 ${className ?? ""}`}
     >
       {items.map(({ id, icon, label, onClick }, index) => {
         const ref = (el: HTMLButtonElement | null) => {
@@ -127,7 +127,7 @@ export const LimelightNav = ({
             key={id}
             ref={ref}
             type="button"
-            className={`relative z-20 flex h-full cursor-pointer items-center justify-center p-5 ${iconContainerClassName ?? ""}`}
+            className={`relative z-20 flex flex-1 h-full cursor-pointer items-center justify-center p-5 ${iconContainerClassName ?? ""}`}
             onClick={() => handleItemClick(index, onClick)}
             aria-label={label}
           >

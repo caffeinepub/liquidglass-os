@@ -1,3 +1,4 @@
+import { MinimalFooter } from "@/components/ui/minimal-footer";
 import { Gamepad2, Headphones, Server, Shield, Zap } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -572,50 +573,10 @@ function CTASection() {
   );
 }
 
-// ─── Footer ──────────────────────────────────────────────────────────────────
-function Footer() {
-  const year = new Date().getFullYear();
-  return (
-    <footer className="border-t border-white/[0.05] py-8 px-6">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/40">
-        <div className="flex items-center gap-2">
-          <span className="text-white/60 font-semibold">DarkSanta</span>
-          <span>·</span>
-          <span>© {year}</span>
-        </div>
-        <div className="flex items-center gap-6">
-          <a href="/privacy" className="hover:text-white/60 transition-colors">
-            Privacy
-          </a>
-          <a href="/terms" className="hover:text-white/60 transition-colors">
-            Terms
-          </a>
-          <a
-            href="https://discord.gg/darksanta"
-            className="hover:text-white/60 transition-colors"
-          >
-            Discord
-          </a>
-        </div>
-        <div>
-          <a
-            href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-white/60 transition-colors"
-          >
-            Built with ❤️ using caffeine.ai
-          </a>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function MainSitePage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#050505" }}>
+    <div className="min-h-screen">
       <Navbar />
       <main className="pb-20">
         <HeroSection />
@@ -623,7 +584,7 @@ export default function MainSitePage() {
         <PerformanceSection />
         <WhyDarkSanta />
         <CTASection />
-        <Footer />
+        <MinimalFooter />
       </main>
       <BottomDock />
     </div>
