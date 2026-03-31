@@ -1,9 +1,23 @@
 import { House, LayoutDashboard, Server, Zap } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LimelightNav, type NavItem } from "./ui/limelight-nav";
 
+function getActiveIndexFromHash() {
+  const hash = window.location.hash;
+  if (hash.startsWith("#/nodes")) return 3;
+  if (hash.startsWith("#/") && hash !== "#/") return 0;
+  return 0;
+}
+
 export default function BottomDock() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(getActiveIndexFromHash);
+
+  // Sync active index when hash changes (e.g. back/forward navigation)
+  useEffect(() => {
+    const onHashChange = () => setActiveIndex(getActiveIndexFromHash());
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
 
   const items: NavItem[] = [
     {
@@ -11,7 +25,10 @@ export default function BottomDock() {
       icon: <House className="w-5 h-5" />,
       label: "Home",
       onClick: () => {
-        window.location.hash = "#/";
+        // Let limelight animate (400 ms) then navigate
+        setTimeout(() => {
+          window.location.hash = "#/";
+        }, 180);
       },
     },
     {
@@ -19,8 +36,10 @@ export default function BottomDock() {
       icon: <Server className="w-5 h-5" />,
       label: "Plans",
       onClick: () => {
-        const el = document.getElementById("plans");
-        el?.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => {
+          const el = document.getElementById("plans");
+          el?.scrollIntoView({ behavior: "smooth" });
+        }, 180);
       },
     },
     {
@@ -28,7 +47,9 @@ export default function BottomDock() {
       icon: <LayoutDashboard className="w-5 h-5" />,
       label: "Dashboard",
       onClick: () => {
-        window.open("https://login-o9c.caffeine.xyz/", "_blank");
+        setTimeout(() => {
+          window.open("https://login-o9c.caffeine.xyz/", "_blank");
+        }, 180);
       },
     },
     {
@@ -36,7 +57,9 @@ export default function BottomDock() {
       icon: <Zap className="w-5 h-5" />,
       label: "Nodes",
       onClick: () => {
-        window.location.hash = "#/nodes";
+        setTimeout(() => {
+          window.location.hash = "#/nodes";
+        }, 180);
       },
     },
   ];
