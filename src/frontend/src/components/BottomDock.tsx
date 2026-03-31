@@ -11,7 +11,7 @@ export default function BottomDock() {
       icon: <House className="w-5 h-5" />,
       label: "Home",
       onClick: () => {
-        window.location.hash = "#/home";
+        window.location.hash = "#/";
       },
     },
     {
@@ -32,12 +32,11 @@ export default function BottomDock() {
       },
     },
     {
-      id: "deploy",
+      id: "nodes",
       icon: <Zap className="w-5 h-5" />,
-      label: "Deploy",
+      label: "Nodes",
       onClick: () => {
-        const el = document.getElementById("cta");
-        el?.scrollIntoView({ behavior: "smooth" });
+        window.location.hash = "#/nodes";
       },
     },
   ];

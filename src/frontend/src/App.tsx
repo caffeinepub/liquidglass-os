@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { BeamsBackground } from "./components/ui/beams-background";
 import MainSitePage from "./pages/MainSitePage";
+import NodeListPage from "./pages/NodeListPage";
 import NodesPage from "./pages/NodesPage";
 
 function getRoute() {
   const hash = window.location.hash;
   if (hash.startsWith("#/nodes")) return "nodes";
+  if (hash.startsWith("#/node-list")) return "node-list";
   return "home";
 }
 
@@ -21,7 +23,13 @@ export default function App() {
   return (
     <>
       <BeamsBackground intensity="medium" />
-      {route === "nodes" ? <NodesPage /> : <MainSitePage />}
+      {route === "nodes" ? (
+        <NodesPage />
+      ) : route === "node-list" ? (
+        <NodeListPage />
+      ) : (
+        <MainSitePage />
+      )}
     </>
   );
 }
