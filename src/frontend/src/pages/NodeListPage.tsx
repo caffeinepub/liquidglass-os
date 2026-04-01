@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
 import BottomDock from "../components/BottomDock";
 import Navbar from "../components/Navbar";
+import { BeamsBackground } from "../components/ui/beams-background";
+import { EtheralShadow } from "../components/ui/etheral-shadow";
 
 interface NodeCard {
   id: string;
@@ -74,9 +76,26 @@ export default function NodeListPage() {
 
   return (
     <div className="relative min-h-screen bg-[#050505] overflow-x-hidden">
-      {/* Background glow */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+      {/* ── Animated background layers ── */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        {/* BeamsBackground + EtheralShadow: desktop only */}
+        <div className="hidden md:block absolute inset-0">
+          <BeamsBackground intensity="subtle" className="absolute inset-0" />
+        </div>
+        <div className="hidden md:block absolute inset-0 opacity-30">
+          <EtheralShadow
+            color="rgba(30,64,175,0.6)"
+            animation={{ scale: 60, speed: 60 }}
+            noise={{ opacity: 0.4, scale: 1.2 }}
+            sizing="fill"
+          />
+        </div>
+        {/* Aurora glow blobs — lightweight, work on mobile too */}
+        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/8 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-0 w-[350px] h-[350px] bg-purple-600/6 rounded-full blur-[120px]" />
+        {/* Bottom dark fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black/80 to-transparent" />
+      </div>
 
       <Navbar />
 
@@ -112,7 +131,7 @@ export default function NodeListPage() {
                 ease: [0.4, 0, 0.2, 1],
               }}
               data-ocid={`node_list.item.${i + 1}`}
-              className="group bg-black/50 backdrop-blur-lg border border-white/10 rounded-2xl p-5 cursor-pointer hover:border-white/20 hover:bg-black/60 transition-all duration-200"
+              className="group bg-black/50 backdrop-blur-md md:backdrop-blur-[60px] border border-white/10 rounded-2xl p-5 cursor-pointer hover:border-white/20 hover:bg-black/60 transition-all duration-200"
               onClick={handleNavigateToNode}
             >
               {/* Card header */}

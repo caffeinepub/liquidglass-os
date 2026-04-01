@@ -122,6 +122,7 @@ export const LimelightNav = ({
         const ref = (el: HTMLButtonElement | null) => {
           navItemRefs.current[index] = el;
         };
+        const isActive = activeIndex === index;
         return (
           <button
             key={id}
@@ -132,8 +133,8 @@ export const LimelightNav = ({
             aria-label={label}
           >
             <span
-              className={`w-6 h-6 flex items-center justify-center transition-opacity duration-100 ease-in-out ${
-                activeIndex === index ? "opacity-100" : "opacity-40"
+              className={`w-6 h-6 flex items-center justify-center transition-[opacity,transform] duration-200 ease-out ${
+                isActive ? "opacity-100 scale-110" : "opacity-40 scale-100"
               } ${iconClassName ?? ""}`}
             >
               {icon}
@@ -144,11 +145,13 @@ export const LimelightNav = ({
       <div
         ref={limelightRef}
         className={`absolute top-0 z-10 w-11 h-[5px] rounded-full ${
-          isReady ? "transition-[left] duration-[400ms] ease-in-out" : ""
+          isReady
+            ? "transition-[left] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+            : ""
         } ${limelightClassName ?? "bg-primary shadow-[0_50px_15px_var(--primary)]"}`}
-        style={{ left: "-999px" }}
+        style={{ left: "-999px", willChange: "transform" }}
       >
-        <div className="absolute left-[-30%] top-[5px] w-[160%] h-14 [clip-path:polygon(5%_100%,25%_0,75%_0,95%_100%)] bg-gradient-to-b from-primary/30 to-transparent pointer-events-none" />
+        <div className="absolute left-[-30%] top-[5px] w-[160%] h-14 [clip-path:polygon(5%_100%,25%_0,75%_0,95%_100%)] bg-gradient-to-b from-primary/30 to-transparent opacity-80 pointer-events-none transition-opacity duration-200" />
       </div>
     </nav>
   );

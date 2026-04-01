@@ -25,7 +25,6 @@ export default function BottomDock() {
       icon: <House className="w-5 h-5" />,
       label: "Home",
       onClick: () => {
-        // Let limelight animate (400 ms) then navigate
         setTimeout(() => {
           window.location.hash = "#/";
         }, 180);
@@ -67,12 +66,12 @@ export default function BottomDock() {
   return (
     <div
       data-ocid="bottom_dock.panel"
-      className="fixed bottom-0 left-0 right-0 z-50"
+      className="fixed bottom-0 left-0 right-0 z-50 will-change-transform"
     >
       {/* Gradient fade above dock */}
       <div className="absolute -top-12 left-0 right-0 h-12 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
 
-      <div className="bg-black/60 backdrop-blur-md border-t border-white/[0.08] h-16">
+      <div className="bg-black/70 backdrop-blur-[60px] saturate-150 border-t border-white/[0.08] h-16">
         <div className="max-w-lg mx-auto h-full flex items-center">
           <LimelightNav
             items={items}

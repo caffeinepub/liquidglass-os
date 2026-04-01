@@ -140,11 +140,11 @@ export default function NodesPage() {
     <div className="relative min-h-screen bg-[#050505] overflow-x-hidden">
       {/* ── Animated background layers — hidden on mobile to save GPU ── */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* BeamsBackground: hidden on small screens */}
+        {/* BeamsBackground: desktop only */}
         <div className="hidden md:block absolute inset-0">
           <BeamsBackground intensity="subtle" className="absolute inset-0" />
         </div>
-        {/* EtheralShadow: hidden on small screens */}
+        {/* EtheralShadow: desktop only */}
         <div className="hidden md:block absolute inset-0 opacity-30">
           <EtheralShadow
             color="rgba(30,64,175,0.6)"
@@ -153,8 +153,9 @@ export default function NodesPage() {
             sizing="fill"
           />
         </div>
-        {/* Blue glow top-left */}
+        {/* Aurora glow blobs — lightweight CSS, always visible */}
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/8 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-0 w-[400px] h-[400px] bg-purple-600/6 rounded-full blur-[120px]" />
         {/* Bottom dark fade */}
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black/80 to-transparent" />
       </div>
@@ -166,7 +167,7 @@ export default function NodesPage() {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
-          className="w-full max-w-5xl mx-4 md:mx-auto bg-black/60 backdrop-blur-md md:backdrop-blur-2xl border border-white/10 rounded-2xl shadow-lg md:shadow-2xl p-4 md:p-8"
+          className="w-full max-w-5xl mx-4 md:mx-auto bg-black/70 backdrop-blur-[60px] saturate-150 border border-white/15 rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_40px_rgba(0,0,0,0.8)] p-4 md:p-8"
           data-ocid="nodes.panel"
         >
           {/* ── Minecraft banner image ── */}
@@ -331,7 +332,7 @@ export default function NodesPage() {
                           delay: 0.3 + idx * 0.1,
                           ease: "easeOut",
                         }}
-                        className={`bg-emerald-950/20 backdrop-blur-md border border-emerald-500/10 rounded-xl p-4 ${
+                        className={`bg-black/50 backdrop-blur-[30px] border border-white/10 rounded-xl p-4 ${
                           block.full ? "col-span-full" : ""
                         }`}
                       >
