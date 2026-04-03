@@ -89,10 +89,291 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface backendInterface {
+export interface NodeInput {
+    id: string;
+    region: string;
+    owner: string;
+    name: string;
+    hardware: {
+        storageGB: bigint;
+        ramGB: bigint;
+        cpuCores: bigint;
+    };
+    config: {
+        port: bigint;
+        autoRestart: boolean;
+        version: string;
+        backupEnabled: boolean;
+        maxPlayers: bigint;
+    };
 }
+export type Time = bigint;
+export interface NodeConfig {
+    port: bigint;
+    autoRestart: boolean;
+    version: string;
+    backupEnabled: boolean;
+    maxPlayers: bigint;
+}
+export interface Node {
+    id: string;
+    region: string;
+    status: Status;
+    owner: string;
+    name: string;
+    createdAt: Time;
+    hardware: {
+        storageGB: bigint;
+        ramGB: bigint;
+        cpuCores: bigint;
+    };
+    config: {
+        port: bigint;
+        autoRestart: boolean;
+        version: string;
+        backupEnabled: boolean;
+        maxPlayers: bigint;
+    };
+}
+export enum Status {
+    starting = "starting",
+    error = "error",
+    available = "available",
+    updating = "updating",
+    booting = "booting",
+    shuttingDown = "shuttingDown",
+    offline = "offline",
+    running = "running"
+}
+export interface backendInterface {
+    createNode(input: NodeInput): Promise<Node>;
+    deleteNode(id: string): Promise<void>;
+    getAllNodes(): Promise<Array<Node>>;
+    getNode(id: string): Promise<Node | null>;
+    getNodesByOwner(owner: string): Promise<Array<Node>>;
+    updateNodeConfig(id: string, config: NodeConfig): Promise<Node>;
+    updateNodeStatus(id: string, status: Status): Promise<Node>;
+}
+import type { Node as _Node, Status as _Status, Time as _Time } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async createNode(arg0: NodeInput): Promise<Node> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createNode(arg0);
+                return from_candid_Node_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createNode(arg0);
+            return from_candid_Node_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async deleteNode(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteNode(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteNode(arg0);
+            return result;
+        }
+    }
+    async getAllNodes(): Promise<Array<Node>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllNodes();
+                return from_candid_vec_n5(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllNodes();
+            return from_candid_vec_n5(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getNode(arg0: string): Promise<Node | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getNode(arg0);
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getNode(arg0);
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getNodesByOwner(arg0: string): Promise<Array<Node>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getNodesByOwner(arg0);
+                return from_candid_vec_n5(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getNodesByOwner(arg0);
+            return from_candid_vec_n5(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async updateNodeConfig(arg0: string, arg1: NodeConfig): Promise<Node> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateNodeConfig(arg0, arg1);
+                return from_candid_Node_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateNodeConfig(arg0, arg1);
+            return from_candid_Node_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async updateNodeStatus(arg0: string, arg1: Status): Promise<Node> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateNodeStatus(arg0, to_candid_Status_n7(this._uploadFile, this._downloadFile, arg1));
+                return from_candid_Node_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateNodeStatus(arg0, to_candid_Status_n7(this._uploadFile, this._downloadFile, arg1));
+            return from_candid_Node_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
+}
+function from_candid_Node_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Node): Node {
+    return from_candid_record_n2(_uploadFile, _downloadFile, value);
+}
+function from_candid_Status_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Status): Status {
+    return from_candid_variant_n4(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_Node]): Node | null {
+    return value.length === 0 ? null : from_candid_Node_n1(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_record_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    id: string;
+    region: string;
+    status: _Status;
+    owner: string;
+    name: string;
+    createdAt: _Time;
+    hardware: {
+        storageGB: bigint;
+        ramGB: bigint;
+        cpuCores: bigint;
+    };
+    config: {
+        port: bigint;
+        autoRestart: boolean;
+        version: string;
+        backupEnabled: boolean;
+        maxPlayers: bigint;
+    };
+}): {
+    id: string;
+    region: string;
+    status: Status;
+    owner: string;
+    name: string;
+    createdAt: Time;
+    hardware: {
+        storageGB: bigint;
+        ramGB: bigint;
+        cpuCores: bigint;
+    };
+    config: {
+        port: bigint;
+        autoRestart: boolean;
+        version: string;
+        backupEnabled: boolean;
+        maxPlayers: bigint;
+    };
+} {
+    return {
+        id: value.id,
+        region: value.region,
+        status: from_candid_Status_n3(_uploadFile, _downloadFile, value.status),
+        owner: value.owner,
+        name: value.name,
+        createdAt: value.createdAt,
+        hardware: value.hardware,
+        config: value.config
+    };
+}
+function from_candid_variant_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    starting: null;
+} | {
+    error: null;
+} | {
+    available: null;
+} | {
+    updating: null;
+} | {
+    booting: null;
+} | {
+    shuttingDown: null;
+} | {
+    offline: null;
+} | {
+    running: null;
+}): Status {
+    return "starting" in value ? Status.starting : "error" in value ? Status.error : "available" in value ? Status.available : "updating" in value ? Status.updating : "booting" in value ? Status.booting : "shuttingDown" in value ? Status.shuttingDown : "offline" in value ? Status.offline : "running" in value ? Status.running : value;
+}
+function from_candid_vec_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Node>): Array<Node> {
+    return value.map((x)=>from_candid_Node_n1(_uploadFile, _downloadFile, x));
+}
+function to_candid_Status_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Status): _Status {
+    return to_candid_variant_n8(_uploadFile, _downloadFile, value);
+}
+function to_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Status): {
+    starting: null;
+} | {
+    error: null;
+} | {
+    available: null;
+} | {
+    updating: null;
+} | {
+    booting: null;
+} | {
+    shuttingDown: null;
+} | {
+    offline: null;
+} | {
+    running: null;
+} {
+    return value == Status.starting ? {
+        starting: null
+    } : value == Status.error ? {
+        error: null
+    } : value == Status.available ? {
+        available: null
+    } : value == Status.updating ? {
+        updating: null
+    } : value == Status.booting ? {
+        booting: null
+    } : value == Status.shuttingDown ? {
+        shuttingDown: null
+    } : value == Status.offline ? {
+        offline: null
+    } : value == Status.running ? {
+        running: null
+    } : value;
 }
 export interface CreateActorOptions {
     agent?: Agent;

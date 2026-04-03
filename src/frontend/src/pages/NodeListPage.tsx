@@ -1,5 +1,7 @@
 import { motion } from "motion/react";
+import { useState } from "react";
 import BottomDock from "../components/BottomDock";
+import DeployModal from "../components/DeployModal";
 import Navbar from "../components/Navbar";
 import { BeamsBackground } from "../components/ui/beams-background";
 import { EtheralShadow } from "../components/ui/etheral-shadow";
@@ -27,19 +29,9 @@ const NODES: NodeCard[] = [
     ramUsage: 54,
   },
   {
-    id: "shadow",
-    name: "Shadow Node",
+    id: "phantom",
+    name: "Phantom Node",
     region: "US-East · New York",
-    status: "online",
-    ram: "32 GB",
-    cpu: "Ryzen 9 7950X",
-    cpuUsage: 41,
-    ramUsage: 72,
-  },
-  {
-    id: "specter",
-    name: "Specter Node",
-    region: "Asia · Mumbai",
     status: "offline",
     ram: "8 GB",
     cpu: "Ryzen 7 5800X",
@@ -47,11 +39,21 @@ const NODES: NodeCard[] = [
     ramUsage: 0,
   },
   {
-    id: "ghost",
-    name: "Ghost Node",
+    id: "ember",
+    name: "Ember Node",
+    region: "Asia · Singapore",
+    status: "online",
+    ram: "4 GB",
+    cpu: "Ryzen 5 5600X",
+    cpuUsage: 28,
+    ramUsage: 41,
+  },
+  {
+    id: "overlord",
+    name: "Overlord Node",
     region: "EU-North · Stockholm",
     status: "online",
-    ram: "64 GB",
+    ram: "32 GB",
     cpu: "EPYC 7742",
     cpuUsage: 22,
     ramUsage: 38,
@@ -70,15 +72,16 @@ function MiniBar({ value }: { value: number }) {
 }
 
 export default function NodeListPage() {
-  const handleNavigateToNode = () => {
-    window.location.hash = "#/nodes";
+  const [showDeploy, setShowDeploy] = useState(false);
+
+  const handleNavigateToNode = (nodeId: string) => {
+    window.location.hash = `#/nodes/${nodeId}`;
   };
 
   return (
     <div className="relative min-h-screen bg-[#050505] overflow-x-hidden">
-      {/* ── Animated background layers ── */}
+      {/* Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* BeamsBackground + EtheralShadow: desktop only */}
         <div className="hidden md:block absolute inset-0">
           <BeamsBackground intensity="subtle" className="absolute inset-0" />
         </div>
@@ -90,34 +93,40 @@ export default function NodeListPage() {
             sizing="fill"
           />
         </div>
-        {/* Aurora glow blobs — lightweight, work on mobile too */}
-        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/8 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-0 w-[350px] h-[350px] bg-purple-600/6 rounded-full blur-[120px]" />
-        {/* Bottom dark fade */}
+        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/6 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-0 w-[350px] h-[350px] bg-purple-600/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black/80 to-transparent" />
       </div>
 
-      <Navbar />
+      <Navbar onDeploy={() => setShowDeploy(true)} />
 
       <main className="relative z-10 min-h-screen px-4 pt-28 pb-32">
-        {/* Page header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
-          className="max-w-5xl mx-auto mb-8"
+          transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+          className="max-w-5xl mx-auto mb-8 flex items-center justify-between"
         >
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            Your Nodes
-          </h1>
-          <p className="text-sm text-white/50 mt-1">
-            Manage and monitor your active server nodes
-          </p>
+          <div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">
+              Your Nodes
+            </h1>
+            <p className="text-sm text-white/40 mt-1">
+              Manage and monitor your active server nodes
+            </p>
+          </div>
+          <button
+            data-ocid="node_list.primary_button"
+            type="button"
+            onClick={() => setShowDeploy(true)}
+            className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
+          >
+            Deploy Node
+          </button>
         </motion.div>
 
-        {/* Node cards grid */}
         <div
-          className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5"
+          className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5"
           data-ocid="node_list.list"
         >
           {NODES.map((node, i) => (
@@ -128,11 +137,11 @@ export default function NodeListPage() {
               transition={{
                 duration: 0.45,
                 delay: i * 0.07,
-                ease: [0.4, 0, 0.2, 1],
+                ease: [0.25, 1, 0.5, 1],
               }}
               data-ocid={`node_list.item.${i + 1}`}
-              className="group bg-black/50 backdrop-blur-md md:backdrop-blur-[60px] border border-white/10 rounded-2xl p-5 cursor-pointer hover:border-white/20 hover:bg-black/60 transition-all duration-200"
-              onClick={handleNavigateToNode}
+              className="group bg-black/50 backdrop-blur-md md:backdrop-blur-[50px] border border-white/10 rounded-2xl p-5 cursor-pointer hover:border-white/[0.18] hover:bg-black/60 transition-all duration-200"
+              onClick={() => handleNavigateToNode(node.id)}
             >
               {/* Card header */}
               <div className="flex items-start justify-between mb-4">
@@ -140,7 +149,7 @@ export default function NodeListPage() {
                   <h2 className="text-base font-semibold text-white tracking-tight">
                     {node.name}
                   </h2>
-                  <p className="text-xs text-white/50 mt-0.5 uppercase tracking-widest">
+                  <p className="text-xs text-white/40 mt-0.5 uppercase tracking-widest">
                     {node.region}
                   </p>
                 </div>
@@ -161,16 +170,16 @@ export default function NodeListPage() {
                 )}
               </div>
 
-              {/* Quick specs */}
+              {/* Specs */}
               <div className="grid grid-cols-2 gap-2 mb-4">
-                <div className="bg-black/40 border border-white/5 rounded-xl p-3">
-                  <p className="text-xs uppercase tracking-widest text-white/30 mb-0.5">
+                <div className="bg-black/40 border border-white/[0.05] rounded-xl p-3">
+                  <p className="text-[10px] uppercase tracking-widest text-white/30 mb-0.5">
                     RAM
                   </p>
                   <p className="text-white text-sm font-medium">{node.ram}</p>
                 </div>
-                <div className="bg-black/40 border border-white/5 rounded-xl p-3">
-                  <p className="text-xs uppercase tracking-widest text-white/30 mb-0.5">
+                <div className="bg-black/40 border border-white/[0.05] rounded-xl p-3">
+                  <p className="text-[10px] uppercase tracking-widest text-white/30 mb-0.5">
                     CPU
                   </p>
                   <p className="text-white text-sm font-medium truncate">
@@ -179,39 +188,38 @@ export default function NodeListPage() {
                 </div>
               </div>
 
-              {/* Mini stat bars */}
+              {/* Mini bars */}
               {node.status === "online" && (
-                <div className="space-y-2.5 mb-4">
+                <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-white/40 w-8 shrink-0">
+                    <span className="text-[10px] text-white/40 w-8 shrink-0">
                       CPU
                     </span>
                     <MiniBar value={node.cpuUsage} />
-                    <span className="text-xs text-white/60 w-8 text-right shrink-0">
+                    <span className="text-[10px] text-white/50 w-8 text-right shrink-0">
                       {node.cpuUsage}%
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-white/40 w-8 shrink-0">
+                    <span className="text-[10px] text-white/40 w-8 shrink-0">
                       RAM
                     </span>
                     <MiniBar value={node.ramUsage} />
-                    <span className="text-xs text-white/60 w-8 text-right shrink-0">
+                    <span className="text-[10px] text-white/50 w-8 text-right shrink-0">
                       {node.ramUsage}%
                     </span>
                   </div>
                 </div>
               )}
 
-              {/* Manage button */}
               <button
                 type="button"
-                data-ocid={`node_list.manage_button.${i + 1}`}
+                data-ocid={`node_list.edit_button.${i + 1}`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleNavigateToNode();
+                  handleNavigateToNode(node.id);
                 }}
-                className="w-full mt-1 bg-white/8 hover:bg-white/15 border border-white/10 text-white/80 hover:text-white rounded-xl px-4 py-2 text-sm font-medium transition-all duration-150 active:scale-95"
+                className="w-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.08] text-white/70 hover:text-white rounded-xl px-4 py-2 text-sm font-medium transition-all duration-150 active:scale-95"
               >
                 Manage
               </button>
@@ -221,6 +229,7 @@ export default function NodeListPage() {
       </main>
 
       <BottomDock />
+      {showDeploy && <DeployModal onClose={() => setShowDeploy(false)} />}
     </div>
   );
 }

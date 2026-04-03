@@ -1,4 +1,4 @@
-import { MinimalFooter } from "./ui/minimal-footer";
+import { MinimalFooter } from "@/components/ui/minimal-footer";
 
 export default function Footer() {
   return <MinimalFooter />;

@@ -10,7 +10,61 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface _SERVICE {}
+export interface Node {
+  'id' : string,
+  'region' : string,
+  'status' : Status,
+  'owner' : string,
+  'name' : string,
+  'createdAt' : Time,
+  'hardware' : { 'storageGB' : bigint, 'ramGB' : bigint, 'cpuCores' : bigint },
+  'config' : {
+    'port' : bigint,
+    'autoRestart' : boolean,
+    'version' : string,
+    'backupEnabled' : boolean,
+    'maxPlayers' : bigint,
+  },
+}
+export interface NodeConfig {
+  'port' : bigint,
+  'autoRestart' : boolean,
+  'version' : string,
+  'backupEnabled' : boolean,
+  'maxPlayers' : bigint,
+}
+export interface NodeInput {
+  'id' : string,
+  'region' : string,
+  'owner' : string,
+  'name' : string,
+  'hardware' : { 'storageGB' : bigint, 'ramGB' : bigint, 'cpuCores' : bigint },
+  'config' : {
+    'port' : bigint,
+    'autoRestart' : boolean,
+    'version' : string,
+    'backupEnabled' : boolean,
+    'maxPlayers' : bigint,
+  },
+}
+export type Status = { 'starting' : null } |
+  { 'error' : null } |
+  { 'available' : null } |
+  { 'updating' : null } |
+  { 'booting' : null } |
+  { 'shuttingDown' : null } |
+  { 'offline' : null } |
+  { 'running' : null };
+export type Time = bigint;
+export interface _SERVICE {
+  'createNode' : ActorMethod<[NodeInput], Node>,
+  'deleteNode' : ActorMethod<[string], undefined>,
+  'getAllNodes' : ActorMethod<[], Array<Node>>,
+  'getNode' : ActorMethod<[string], [] | [Node]>,
+  'getNodesByOwner' : ActorMethod<[string], Array<Node>>,
+  'updateNodeConfig' : ActorMethod<[string, NodeConfig], Node>,
+  'updateNodeStatus' : ActorMethod<[string, Status], Node>,
+}
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
 export declare const idlFactory: IDL.InterfaceFactory;

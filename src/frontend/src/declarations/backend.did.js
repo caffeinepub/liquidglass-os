@@ -8,10 +8,142 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const idlService = IDL.Service({});
+export const NodeInput = IDL.Record({
+  'id' : IDL.Text,
+  'region' : IDL.Text,
+  'owner' : IDL.Text,
+  'name' : IDL.Text,
+  'hardware' : IDL.Record({
+    'storageGB' : IDL.Nat,
+    'ramGB' : IDL.Nat,
+    'cpuCores' : IDL.Nat,
+  }),
+  'config' : IDL.Record({
+    'port' : IDL.Nat,
+    'autoRestart' : IDL.Bool,
+    'version' : IDL.Text,
+    'backupEnabled' : IDL.Bool,
+    'maxPlayers' : IDL.Nat,
+  }),
+});
+export const Status = IDL.Variant({
+  'starting' : IDL.Null,
+  'error' : IDL.Null,
+  'available' : IDL.Null,
+  'updating' : IDL.Null,
+  'booting' : IDL.Null,
+  'shuttingDown' : IDL.Null,
+  'offline' : IDL.Null,
+  'running' : IDL.Null,
+});
+export const Time = IDL.Int;
+export const Node = IDL.Record({
+  'id' : IDL.Text,
+  'region' : IDL.Text,
+  'status' : Status,
+  'owner' : IDL.Text,
+  'name' : IDL.Text,
+  'createdAt' : Time,
+  'hardware' : IDL.Record({
+    'storageGB' : IDL.Nat,
+    'ramGB' : IDL.Nat,
+    'cpuCores' : IDL.Nat,
+  }),
+  'config' : IDL.Record({
+    'port' : IDL.Nat,
+    'autoRestart' : IDL.Bool,
+    'version' : IDL.Text,
+    'backupEnabled' : IDL.Bool,
+    'maxPlayers' : IDL.Nat,
+  }),
+});
+export const NodeConfig = IDL.Record({
+  'port' : IDL.Nat,
+  'autoRestart' : IDL.Bool,
+  'version' : IDL.Text,
+  'backupEnabled' : IDL.Bool,
+  'maxPlayers' : IDL.Nat,
+});
+
+export const idlService = IDL.Service({
+  'createNode' : IDL.Func([NodeInput], [Node], []),
+  'deleteNode' : IDL.Func([IDL.Text], [], []),
+  'getAllNodes' : IDL.Func([], [IDL.Vec(Node)], []),
+  'getNode' : IDL.Func([IDL.Text], [IDL.Opt(Node)], []),
+  'getNodesByOwner' : IDL.Func([IDL.Text], [IDL.Vec(Node)], []),
+  'updateNodeConfig' : IDL.Func([IDL.Text, NodeConfig], [Node], []),
+  'updateNodeStatus' : IDL.Func([IDL.Text, Status], [Node], []),
+});
 
 export const idlInitArgs = [];
 
-export const idlFactory = ({ IDL }) => { return IDL.Service({}); };
+export const idlFactory = ({ IDL }) => {
+  const NodeInput = IDL.Record({
+    'id' : IDL.Text,
+    'region' : IDL.Text,
+    'owner' : IDL.Text,
+    'name' : IDL.Text,
+    'hardware' : IDL.Record({
+      'storageGB' : IDL.Nat,
+      'ramGB' : IDL.Nat,
+      'cpuCores' : IDL.Nat,
+    }),
+    'config' : IDL.Record({
+      'port' : IDL.Nat,
+      'autoRestart' : IDL.Bool,
+      'version' : IDL.Text,
+      'backupEnabled' : IDL.Bool,
+      'maxPlayers' : IDL.Nat,
+    }),
+  });
+  const Status = IDL.Variant({
+    'starting' : IDL.Null,
+    'error' : IDL.Null,
+    'available' : IDL.Null,
+    'updating' : IDL.Null,
+    'booting' : IDL.Null,
+    'shuttingDown' : IDL.Null,
+    'offline' : IDL.Null,
+    'running' : IDL.Null,
+  });
+  const Time = IDL.Int;
+  const Node = IDL.Record({
+    'id' : IDL.Text,
+    'region' : IDL.Text,
+    'status' : Status,
+    'owner' : IDL.Text,
+    'name' : IDL.Text,
+    'createdAt' : Time,
+    'hardware' : IDL.Record({
+      'storageGB' : IDL.Nat,
+      'ramGB' : IDL.Nat,
+      'cpuCores' : IDL.Nat,
+    }),
+    'config' : IDL.Record({
+      'port' : IDL.Nat,
+      'autoRestart' : IDL.Bool,
+      'version' : IDL.Text,
+      'backupEnabled' : IDL.Bool,
+      'maxPlayers' : IDL.Nat,
+    }),
+  });
+  const NodeConfig = IDL.Record({
+    'port' : IDL.Nat,
+    'autoRestart' : IDL.Bool,
+    'version' : IDL.Text,
+    'backupEnabled' : IDL.Bool,
+    'maxPlayers' : IDL.Nat,
+  });
+  
+  return IDL.Service({
+    'createNode' : IDL.Func([NodeInput], [Node], []),
+    'deleteNode' : IDL.Func([IDL.Text], [], []),
+    'getAllNodes' : IDL.Func([], [IDL.Vec(Node)], []),
+    'getNode' : IDL.Func([IDL.Text], [IDL.Opt(Node)], []),
+    'getNodesByOwner' : IDL.Func([IDL.Text], [IDL.Vec(Node)], []),
+    'updateNodeConfig' : IDL.Func([IDL.Text, NodeConfig], [Node], []),
+    'updateNodeStatus' : IDL.Func([IDL.Text, Status], [Node], []),
+  });
+};
 
 export const init = ({ IDL }) => { return []; };
