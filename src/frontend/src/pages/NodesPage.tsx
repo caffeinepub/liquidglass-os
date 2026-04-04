@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import BottomDock from "../components/BottomDock";
 import DeployModal from "../components/DeployModal";
 import Navbar from "../components/Navbar";
-import { BeamsBackground } from "../components/ui/beams-background";
-import { EtheralShadow } from "../components/ui/etheral-shadow";
 
 const NODE_DATA: Record<
   string,
@@ -71,6 +69,7 @@ function Terminal() {
   const [currentLine, setCurrentLine] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
   const [done, setDone] = useState(false);
+  const [revealedLines, setRevealedLines] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (currentLine >= TERMINAL_LINES.length) {
@@ -79,25 +78,33 @@ function Terminal() {
     }
     const target = TERMINAL_LINES[currentLine];
     if (currentChar < target.length) {
+      const delay = 28 + Math.random() * 35;
       const t = setTimeout(() => {
         setLines((prev) => {
           const next = [...prev];
           next[currentLine] = (next[currentLine] ?? "") + target[currentChar];
           return next;
         });
+        if (currentChar === 0) {
+          setRevealedLines((prev) => {
+            const next = [...prev];
+            next[currentLine] = true;
+            return next;
+          });
+        }
         setCurrentChar((c) => c + 1);
-      }, 28);
+      }, delay);
       return () => clearTimeout(t);
     }
     const t = setTimeout(() => {
       setCurrentLine((l) => l + 1);
       setCurrentChar(0);
-    }, 200);
+    }, 180);
     return () => clearTimeout(t);
   }, [currentLine, currentChar]);
 
   return (
-    <div className="bg-black/70 border border-white/10 rounded-xl p-4 font-mono text-sm">
+    <div className="glass-3 rounded-xl p-4 font-mono text-sm">
       <div className="flex items-center gap-2 mb-3 border-b border-white/[0.06] pb-3">
         <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
         <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
@@ -106,11 +113,18 @@ function Terminal() {
       </div>
       <div className="space-y-1 min-h-[120px]">
         {lines.map((line, i) => (
-          // Using index is fine here — lines are append-only and never reordered
-          // biome-ignore lint/suspicious/noArrayIndexKey: terminal lines are append-only
-          <div key={i} className="text-green-400/80 text-xs">
+          <motion.div
+            // biome-ignore lint/suspicious/noArrayIndexKey: terminal lines are append-only
+            key={i}
+            initial={{ opacity: 0, x: -4 }}
+            animate={
+              revealedLines[i] ? { opacity: 1, x: 0 } : { opacity: 0, x: -4 }
+            }
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="text-green-400/80 text-xs"
+          >
             {line}
-          </div>
+          </motion.div>
         ))}
         {!done && (
           <span className="inline-block w-2 h-3.5 bg-green-400/60 animate-blink" />
@@ -124,19 +138,20 @@ function LiveBar({
   value,
   label,
   unit = "%",
-}: { value: number; label: string; unit?: string }) {
+  delay = 0,
+}: { value: number; label: string; unit?: string; delay?: number }) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
-    const t = setTimeout(() => setWidth(value), 150);
+    const t = setTimeout(() => setWidth(value), 150 + delay);
     return () => clearTimeout(t);
-  }, [value]);
+  }, [value, delay]);
 
   return (
     <div>
       <div className="flex justify-between mb-2">
         <span className="text-white/60 text-sm">{label}</span>
         <motion.span
-          className="text-white font-medium text-sm"
+          className="text-white font-medium text-sm tabular-nums"
           animate={{ opacity: [1, 0.6, 1] }}
           transition={{
             duration: 2.5,
@@ -148,13 +163,15 @@ function LiveBar({
           {unit}
         </motion.span>
       </div>
-      <div className="bg-white/10 rounded-full h-1.5 overflow-hidden">
-        <div
-          className="bg-blue-500/80 rounded-full h-1.5 transition-all duration-1000 ease-out"
+      <div className="bg-white/10 rounded-full h-2 overflow-hidden">
+        <motion.div
+          className="bg-blue-500/80 rounded-full h-2"
           style={{
-            width: `${width}%`,
-            boxShadow: "0 0 8px rgba(59,130,246,0.4)",
+            boxShadow: "0 0 8px rgba(59,130,246,0.5)",
           }}
+          initial={{ width: "0%" }}
+          animate={{ width: `${width}%` }}
+          transition={{ duration: 0.9, ease: "easeOut", delay: delay / 1000 }}
         />
       </div>
     </div>
@@ -199,20 +216,10 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
 
   return (
     <div className="relative min-h-screen bg-[#050505] overflow-x-hidden">
+      {/* Lightweight CSS background — no canvas re-creation */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="hidden md:block absolute inset-0">
-          <BeamsBackground intensity="subtle" className="absolute inset-0" />
-        </div>
-        <div className="hidden md:block absolute inset-0 opacity-25">
-          <EtheralShadow
-            color="rgba(30,64,175,0.6)"
-            animation={{ scale: 55, speed: 55 }}
-            noise={{ opacity: 0.3, scale: 1.2 }}
-            sizing="fill"
-          />
-        </div>
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/6 rounded-full blur-[140px]" />
-        <div className="absolute bottom-1/4 right-0 w-[400px] h-[400px] bg-purple-600/5 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/[0.06] rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/4 right-0 w-[400px] h-[400px] bg-purple-600/[0.05] rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black/80 to-transparent" />
       </div>
 
@@ -220,9 +227,9 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
 
       <main className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-32">
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+          transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
           className="w-full max-w-5xl mx-auto"
           data-ocid="nodes.panel"
         >
@@ -232,24 +239,25 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
             onClick={() => {
               window.location.hash = "#/nodes";
             }}
-            className="flex items-center gap-2 text-white/40 hover:text-white/70 text-sm mb-5 transition-colors duration-150 bg-transparent border-none cursor-pointer"
+            className="flex items-center gap-2 text-white/40 hover:text-white/70 text-sm mb-5 transition-all duration-200 bg-transparent border-none cursor-pointer hover:-translate-x-0.5"
           >
             <span>←</span>
             <span>All Nodes</span>
           </button>
 
-          {/* Main panel */}
-          <div className="bg-black/50 backdrop-blur-[60px] saturate-150 border border-white/[0.1] rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.05)] p-6 md:p-8">
-            {/* Banner */}
-            <div className="relative w-full h-20 md:h-32 rounded-xl overflow-hidden mb-7 border border-white/[0.06]">
+          {/* Main panel — deep glass-3 layer matching dock blur */}
+          <div className="glass-3 glass-inner-gradient glass-noise relative rounded-2xl overflow-hidden p-6 md:p-8 transition-all duration-300">
+            {/* Banner image with glass-1 tint overlay on edges */}
+            <div className="relative w-full h-20 md:h-32 rounded-xl overflow-hidden mb-7">
+              <div className="glass-1 absolute inset-0 z-10 pointer-events-none" />
               <img
                 src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=900&q=75"
                 alt="Minecraft server"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
             </div>
 
             {/* Header */}
@@ -277,6 +285,7 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
                 >
                   <motion.span
                     className="w-2 h-2 rounded-full bg-emerald-400"
+                    style={{ boxShadow: "0 0 6px rgba(52,211,153,0.7)" }}
                     animate={{ opacity: [1, 0.4, 1] }}
                     transition={{
                       duration: 2,
@@ -304,7 +313,13 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {/* Left */}
               <div className="space-y-6">
-                <div className="bg-black/40 backdrop-blur-md border border-white/[0.08] rounded-xl p-5">
+                {/* Server Info */}
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+                  className="glass-2 glass-hover-deepen rounded-xl p-5 hover:border-white/[0.14] hover:shadow-[0_0_20px_rgba(59,130,246,0.08)] transition-all duration-200"
+                >
                   <p className="text-[10px] uppercase tracking-widest text-white/40 mb-4">
                     Server Info
                   </p>
@@ -332,19 +347,33 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
                       </div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="bg-black/40 backdrop-blur-md border border-white/[0.08] rounded-xl p-5">
+                {/* Live Stats */}
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.18, ease: "easeOut" }}
+                  className="glass-2 glass-hover-deepen rounded-xl p-5 hover:border-white/[0.14] hover:shadow-[0_0_20px_rgba(59,130,246,0.08)] transition-all duration-200"
+                >
                   <p className="text-[10px] uppercase tracking-widest text-white/40 mb-4">
                     Live Stats
                   </p>
                   <div className="space-y-5">
-                    <LiveBar value={Math.round(cpuUsage)} label="CPU Usage" />
-                    <LiveBar value={Math.round(ramUsage)} label="RAM Usage" />
+                    <LiveBar
+                      value={Math.round(cpuUsage)}
+                      label="CPU Usage"
+                      delay={0}
+                    />
+                    <LiveBar
+                      value={Math.round(ramUsage)}
+                      label="RAM Usage"
+                      delay={100}
+                    />
                     <div className="flex justify-between">
                       <span className="text-white/60 text-sm">Ping</span>
                       <motion.span
-                        className="text-white font-medium text-sm"
+                        className="text-white font-medium text-sm tabular-nums"
                         animate={{ opacity: [1, 0.6, 1] }}
                         transition={{
                           duration: 4,
@@ -355,9 +384,15 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
                       </motion.span>
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="bg-black/40 backdrop-blur-md border border-white/[0.08] rounded-xl p-5">
+                {/* Controls */}
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.26, ease: "easeOut" }}
+                  className="glass-2 glass-hover-deepen rounded-xl p-5 hover:border-white/[0.14] hover:shadow-[0_0_20px_rgba(59,130,246,0.08)] transition-all duration-200"
+                >
                   <p className="text-[10px] uppercase tracking-widest text-white/40 mb-4">
                     Controls
                   </p>
@@ -369,7 +404,7 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
                         data-ocid={`nodes.${action.toLowerCase()}_button`}
                         onClick={() => handleAction(action)}
                         disabled={actionLoading !== null}
-                        className="flex-1 bg-white/[0.06] hover:bg-white/[0.12] disabled:opacity-50 border border-white/[0.08] text-white/80 hover:text-white rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 active:scale-95"
+                        className="ripple-effect glass-1 flex-1 hover:bg-white/[0.12] disabled:opacity-50 text-white/80 hover:text-white rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 active:scale-95"
                       >
                         {actionLoading === action ? (
                           <span className="flex items-center justify-center">
@@ -385,16 +420,21 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
                     type="button"
                     data-ocid="nodes.primary_button"
                     onClick={() => setShowDeploy(true)}
-                    className="w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
+                    className="btn-premium ripple-effect w-full bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
                   >
                     Deploy New Node
                   </button>
-                </div>
+                </motion.div>
               </div>
 
               {/* Right */}
               <div className="space-y-6">
-                <div>
+                {/* Config */}
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.14, ease: "easeOut" }}
+                >
                   <p className="text-[10px] uppercase tracking-widest text-white/40 mb-4">
                     Config
                   </p>
@@ -404,13 +444,14 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
                         <motion.div
                           key={block.label}
                           data-ocid="nodes.config.card"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0, y: 10, scale: 0.97 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
                           transition={{
                             duration: 0.35,
-                            delay: 0.3 + idx * 0.06,
+                            delay: 0.25 + idx * 0.05,
+                            ease: [0.25, 1, 0.5, 1],
                           }}
-                          className="bg-black/40 backdrop-blur-md border border-white/[0.08] rounded-xl p-4"
+                          className="glass-2 glass-hover-deepen rounded-xl p-4 hover:border-blue-500/[0.25] hover:shadow-[0_0_20px_rgba(59,130,246,0.08)] transition-all duration-200 cursor-default"
                         >
                           <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1">
                             {block.label}
@@ -422,14 +463,19 @@ export default function NodesPage({ nodeId }: { nodeId?: string }) {
                       ))}
                     </AnimatePresence>
                   </div>
-                </div>
+                </motion.div>
 
-                <div>
+                {/* Console */}
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.32, ease: "easeOut" }}
+                >
                   <p className="text-[10px] uppercase tracking-widest text-white/40 mb-4">
                     Console
                   </p>
                   <Terminal />
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>

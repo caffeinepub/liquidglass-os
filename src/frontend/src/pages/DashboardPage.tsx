@@ -48,17 +48,21 @@ const MOCK_SERVERS: Server[] = [
 function ProgressBar({
   value,
   color = "bg-blue-500",
-}: { value: number; color?: string }) {
+  delay = 0,
+}: { value: number; color?: string; delay?: number }) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
-    const t = setTimeout(() => setWidth(value), 100);
+    const t = setTimeout(() => setWidth(value), 100 + delay);
     return () => clearTimeout(t);
-  }, [value]);
+  }, [value, delay]);
   return (
-    <div className="bg-white/10 rounded-full h-1.5 w-full overflow-hidden">
+    <div className="bg-white/10 rounded-full h-2 w-full overflow-hidden">
       <div
-        className={`${color} rounded-full h-1.5 transition-all duration-1000 ease-out`}
-        style={{ width: `${width}%` }}
+        className={`${color} rounded-full h-2 transition-all duration-1000 ease-out`}
+        style={{
+          width: `${width}%`,
+          boxShadow: width > 0 ? "0 0 8px rgba(59,130,246,0.4)" : "none",
+        }}
       />
     </div>
   );
@@ -66,7 +70,7 @@ function ProgressBar({
 
 function SkeletonCard() {
   return (
-    <div className="bg-black/40 border border-white/[0.06] rounded-2xl p-6">
+    <div className="glass-2 rounded-2xl p-6 animate-pulse">
       <div className="flex items-start justify-between mb-5">
         <div>
           <div className="shimmer rounded-lg h-4 w-32 mb-2" />
@@ -103,16 +107,19 @@ function ServerCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
-        duration: 0.4,
-        delay: index * 0.08,
+        duration: 0.45,
+        delay: index * 0.1,
         ease: [0.25, 1, 0.5, 1],
       }}
       data-ocid={`dashboard.item.${index + 1}`}
-      className="bg-black/40 backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 hover:border-white/[0.14] transition-all duration-200"
+      className="card-glow card-hover glass-2 glass-hover-deepen glass-noise relative rounded-2xl p-6 hover:border-blue-500/20 overflow-hidden transition-all duration-300"
     >
+      {/* Very subtle blue glow behind card */}
+      <div className="absolute -inset-px bg-blue-500/[0.02] rounded-2xl blur-sm -z-10" />
+
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
@@ -125,7 +132,10 @@ function ServerCard({
         </div>
         {server.status === "online" ? (
           <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot" />
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot"
+              style={{ boxShadow: "0 0 6px rgba(52,211,153,0.6)" }}
+            />
             <span className="text-xs text-emerald-400 font-medium">Online</span>
           </div>
         ) : (
@@ -137,7 +147,10 @@ function ServerCard({
       </div>
 
       {/* Plan badge */}
-      <p className="text-xs text-white/30 mb-4">{server.plan}</p>
+      <p className="text-xs text-white/30 mb-3">{server.plan}</p>
+
+      {/* Subtle divider */}
+      <div className="border-t border-white/[0.05] mb-4" />
 
       {/* Usage bars */}
       <div className="space-y-3 mb-5">
@@ -146,14 +159,18 @@ function ServerCard({
             <span className="text-white/40">CPU</span>
             <span className="text-white/60">{server.cpu}%</span>
           </div>
-          <ProgressBar value={server.cpu} />
+          <ProgressBar value={server.cpu} delay={index * 80} />
         </div>
         <div>
           <div className="flex justify-between text-xs mb-1.5">
             <span className="text-white/40">RAM</span>
             <span className="text-white/60">{server.ram}%</span>
           </div>
-          <ProgressBar value={server.ram} color="bg-blue-500/70" />
+          <ProgressBar
+            value={server.ram}
+            color="bg-blue-500/70"
+            delay={index * 80 + 100}
+          />
         </div>
       </div>
 
@@ -166,7 +183,7 @@ function ServerCard({
             data-ocid={`dashboard.${action.toLowerCase()}_button.${index + 1}`}
             onClick={() => handleAction(action)}
             disabled={actionLoading !== null}
-            className="flex-1 bg-white/[0.05] hover:bg-white/[0.1] disabled:opacity-50 border border-white/[0.08] text-white/70 hover:text-white rounded-xl px-3 py-2 text-xs font-medium transition-all duration-150 active:scale-95"
+            className="ripple-effect glass-1 flex-1 hover:bg-white/[0.1] disabled:opacity-50 text-white/70 hover:text-white rounded-xl px-3 py-2 text-xs font-medium transition-all duration-150 active:scale-95"
           >
             {actionLoading === action ? (
               <span className="flex items-center justify-center gap-1">
@@ -187,12 +204,21 @@ export default function DashboardPage() {
   const [showDeploy, setShowDeploy] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 800);
+    const t = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(t);
   }, []);
 
   return (
     <div className="relative min-h-screen bg-[#050505]">
+      {/* Page-level ambient glows (cheap CSS, no canvas) */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        {/* Subtle radial gradient overlay at top */}
+        <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-blue-600/[0.04] to-transparent" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[350px] bg-blue-700/[0.05] rounded-full blur-[130px]" />
+        <div className="absolute bottom-1/3 right-0 w-[350px] h-[350px] bg-purple-700/[0.04] rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black/50 to-transparent" />
+      </div>
+
       <Navbar onDeploy={() => setShowDeploy(true)} />
 
       <main className="relative z-10 min-h-screen px-4 pt-28 pb-28">
@@ -202,7 +228,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-            className="flex items-center justify-between mb-8"
+            className="flex items-center justify-between mb-6"
           >
             <div>
               <h1 className="text-2xl font-bold text-white tracking-tight">
@@ -216,10 +242,29 @@ export default function DashboardPage() {
               data-ocid="dashboard.primary_button"
               type="button"
               onClick={() => setShowDeploy(true)}
-              className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
+              className="btn-premium ripple-effect bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
             >
               Deploy Server
             </button>
+          </motion.div>
+
+          {/* Animated stat row */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+            className="flex items-center gap-2 flex-wrap mb-8"
+          >
+            {["3 Active Servers", "99.9% Uptime", "12ms Avg Latency"].map(
+              (stat, i) => (
+                <span key={stat} className="flex items-center gap-2">
+                  <span className="text-xs text-white/40 bg-white/[0.04] border border-white/[0.07] rounded-full px-3 py-1">
+                    {stat}
+                  </span>
+                  {i < 2 && <span className="w-px h-3 bg-white/[0.12]" />}
+                </span>
+              ),
+            )}
           </motion.div>
 
           {/* Content */}
@@ -250,17 +295,22 @@ export default function DashboardPage() {
                 data-ocid="dashboard.empty_state"
                 type="button"
                 onClick={() => setShowDeploy(true)}
-                className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
+                className="btn-premium ripple-effect bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-6 py-3 text-sm font-semibold hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
               >
                 Deploy Server
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
               {MOCK_SERVERS.map((server, i) => (
                 <ServerCard key={server.id} server={server} index={i} />
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
       </main>

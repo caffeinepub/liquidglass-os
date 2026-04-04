@@ -35,6 +35,10 @@ export default function LoginPage() {
         <div
           data-ocid="login.panel"
           className="bg-black/50 backdrop-blur-xl border border-white/[0.08] rounded-2xl p-8 shadow-2xl"
+          style={{
+            boxShadow:
+              "0 0 80px rgba(59,130,246,0.04), 0 0 0 1px rgba(255,255,255,0.05), 0 25px 50px rgba(0,0,0,0.5)",
+          }}
         >
           {/* Logo */}
           <div className="flex items-center gap-2.5 mb-8">
@@ -69,7 +73,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:border-blue-500/50 focus:bg-white/[0.07] focus:outline-none transition-all duration-200"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:border-blue-500/50 focus:bg-white/[0.07] focus:outline-none transition-all duration-300"
               />
             </div>
 
@@ -88,7 +92,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:border-blue-500/50 focus:bg-white/[0.07] focus:outline-none transition-all duration-200"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:border-blue-500/50 focus:bg-white/[0.07] focus:outline-none transition-all duration-300"
               />
             </div>
 
@@ -96,7 +100,7 @@ export default function LoginPage() {
               data-ocid="login.submit_button"
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_24px_rgba(59,130,246,0.4)] active:scale-[0.98] mt-2"
+              className="btn-premium ripple-effect w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-xl px-6 py-3 text-sm font-semibold hover:shadow-[0_0_24px_rgba(59,130,246,0.4)] active:scale-[0.98] mt-2"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

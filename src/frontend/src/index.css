@@ -131,6 +131,34 @@
 }
 
 /* =====================
+   GPU ACCELERATION LAYER
+   ===================== */
+.gpu-layer {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* =====================
+   DASHBOARD CARD GLOW PULSE
+   ===================== */
+@keyframes card-glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.04), inset 0 1px 0
+      rgba(255, 255, 255, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.08), inset 0 1px 0
+      rgba(255, 255, 255, 0.08);
+  }
+}
+
+.card-glow {
+  animation: card-glow-pulse 4s ease-in-out infinite;
+}
+
+/* =====================
    GRID OVERLAY
    ===================== */
 .hero-grid {
@@ -145,9 +173,8 @@
    PLAN CARD HOVER
    ===================== */
 .plan-card {
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s
-    cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s
-    cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s
+    cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease;
   will-change: transform;
 }
 
@@ -155,19 +182,184 @@
   transform: scale(1.04) translateY(-4px);
   border-color: rgba(59, 130, 246, 0.3) !important;
   box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.15), 0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 40px rgba(59, 130, 246, 0.08);
+    0 0 40px rgba(59, 130, 246, 0.08), inset 0 0 0 1px rgba(59, 130, 246, 0.1);
 }
 
 .plan-card .extra-specs {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  transition: max-height 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease;
   opacity: 0;
 }
 
 .plan-card:hover .extra-specs {
   max-height: 160px;
   opacity: 1;
+}
+
+/* =====================
+   CARD HOVER (GENERIC)
+   ===================== */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s
+    cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease;
+  will-change: transform;
+}
+
+.card-hover:hover {
+  transform: scale(1.04) translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.08),
+    inset 0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+/* =====================
+   BUTTON PREMIUM
+   ===================== */
+.btn-premium {
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+}
+
+.btn-premium:active {
+  transform: scale(0.96) translateY(0);
+  transition-duration: 0.1s;
+}
+
+/* =====================
+   RIPPLE EFFECT
+   ===================== */
+@keyframes ripple {
+  from {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.3;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect:active::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  padding-top: 100%;
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+/* =====================
+   GRADIENT SHIFT (BACKGROUND MOTION)
+   ===================== */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-gradient-animate {
+  animation: gradient-shift 8s ease infinite;
+  background-size: 200% 200%;
+}
+
+/* =====================
+   GRADIENT BG MOVE (HERO)
+   ===================== */
+@keyframes gradient-bg-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-bg {
+  background-size: 300% 300%;
+  animation: gradient-bg-move 12s ease infinite;
+}
+
+/* =====================
+   NOISE FLOAT
+   ===================== */
+@keyframes noise-float {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(2px, -3px);
+  }
+  66% {
+    transform: translate(-3px, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.noise-float {
+  animation: noise-float 6s ease-in-out infinite;
+}
+
+/* =====================
+   BLUR IN
+   ===================== */
+@keyframes blur-in {
+  from {
+    backdrop-filter: blur(0px);
+    opacity: 0;
+  }
+  to {
+    backdrop-filter: blur(20px);
+    opacity: 1;
+  }
+}
+
+.blur-in {
+  animation: blur-in 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* =====================
+   FLOAT GENTLE
+   ===================== */
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
 }
 
 /* =====================
@@ -209,10 +401,165 @@
 }
 
 /* =====================
+   OTT GLASS SYSTEM
+   ===================== */
+
+/* Layer 1 — background panels */
+.glass-1 {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px) saturate(110%);
+  -webkit-backdrop-filter: blur(8px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Layer 2 — mid panels (cards, sections) */
+.glass-2 {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(24px) saturate(130%);
+  -webkit-backdrop-filter: blur(24px) saturate(130%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0
+    rgba(255, 255, 255, 0.06);
+}
+
+/* Layer 3 — focus layer (main panels, modals) */
+.glass-3 {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(40px) saturate(150%);
+  -webkit-backdrop-filter: blur(40px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0
+    rgba(255, 255, 255, 0.07);
+}
+
+/* Noise grain overlay — add to panels for realism */
+.glass-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Inner gradient on glass panels (top highlight) */
+.glass-inner-gradient::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Dock — deepest blur */
+.dock-glass {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(50px) saturate(160%);
+  -webkit-backdrop-filter: blur(50px) saturate(160%);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Navbar glass — transparent to blurred on scroll */
+.navbar-glass-scrolled {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(36px) saturate(140%);
+  -webkit-backdrop-filter: blur(36px) saturate(140%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Hover blur increase */
+.glass-hover-deepen {
+  transition: backdrop-filter 0.25s ease, background 0.25s ease, box-shadow
+    0.25s ease;
+}
+
+.glass-hover-deepen:hover {
+  backdrop-filter: blur(32px) saturate(150%);
+  -webkit-backdrop-filter: blur(32px) saturate(150%);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* =====================
+   SCAN LINE SUBTLE
+   ===================== */
+@keyframes scan-drift {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+.scan-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.06),
+    transparent
+  );
+  animation: scan-drift 8s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* =====================
    MOBILE PERF
    ===================== */
 @media (max-width: 768px) {
   .hero-grid {
+    display: none;
+  }
+  .float-gentle {
+    animation: none;
+  }
+  .noise-float {
+    animation: none;
+  }
+  .bg-gradient-animate {
+    animation: none;
+  }
+  .animate-gradient-bg {
+    animation: none;
+  }
+  /* Reduce card glow animation on mobile */
+  .card-glow {
+    animation: none;
+  }
+  /* Reduce blur intensity on mobile for performance */
+  .glass-1 {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .glass-2 {
+    backdrop-filter: blur(12px) saturate(110%);
+    -webkit-backdrop-filter: blur(12px) saturate(110%);
+  }
+  .glass-3 {
+    backdrop-filter: blur(20px) saturate(130%);
+    -webkit-backdrop-filter: blur(20px) saturate(130%);
+  }
+  .dock-glass {
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+  }
+  .glass-noise::after {
     display: none;
   }
 }

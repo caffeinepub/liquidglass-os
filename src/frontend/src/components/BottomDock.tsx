@@ -1,4 +1,5 @@
 import { House, LayoutDashboard, Search, UserCircle } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { LimelightNav, type NavItem } from "./ui/limelight-nav";
 
@@ -10,6 +11,18 @@ function getActiveIndexFromHash() {
   return 0;
 }
 
+const ICON_DEFINITIONS = [
+  { id: "home", Icon: House, label: "Home", hash: "#/" },
+  {
+    id: "dashboard",
+    Icon: LayoutDashboard,
+    label: "Dashboard",
+    hash: "#/dashboard",
+  },
+  { id: "nodes", Icon: Search, label: "Nodes", hash: "#/nodes" },
+  { id: "profile", Icon: UserCircle, label: "Profile", hash: "#/login" },
+];
+
 export default function BottomDock() {
   const [activeIndex, setActiveIndex] = useState(getActiveIndexFromHash);
 
@@ -19,59 +32,42 @@ export default function BottomDock() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  const items: NavItem[] = [
-    {
-      id: "home",
-      icon: <House className="w-5 h-5" />,
-      label: "Home",
+  const items: NavItem[] = ICON_DEFINITIONS.map(
+    ({ id, Icon, label, hash }, i) => ({
+      id,
+      label,
+      icon: (
+        <motion.span
+          whileTap={{ scale: 0.88 }}
+          whileHover={{ scale: 1.12 }}
+          transition={{ type: "spring", stiffness: 500, damping: 28 }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Icon className="w-5 h-5" />
+        </motion.span>
+      ),
       onClick: () => {
-        setTimeout(() => {
-          window.location.hash = "#/";
-        }, 80);
+        setActiveIndex(i);
+        // Immediate navigation — no setTimeout delay
+        window.location.hash = hash;
       },
-    },
-    {
-      id: "dashboard",
-      icon: <LayoutDashboard className="w-5 h-5" />,
-      label: "Dashboard",
-      onClick: () => {
-        setTimeout(() => {
-          window.location.hash = "#/dashboard";
-        }, 80);
-      },
-    },
-    {
-      id: "nodes",
-      icon: <Search className="w-5 h-5" />,
-      label: "Nodes",
-      onClick: () => {
-        setTimeout(() => {
-          window.location.hash = "#/nodes";
-        }, 80);
-      },
-    },
-    {
-      id: "profile",
-      icon: <UserCircle className="w-5 h-5" />,
-      label: "Profile",
-      onClick: () => {
-        setTimeout(() => {
-          window.location.hash = "#/login";
-        }, 80);
-      },
-    },
-  ];
+    }),
+  );
 
   return (
     <div
       data-ocid="bottom_dock.panel"
-      className="fixed bottom-0 left-0 right-0 z-50"
-      style={{ willChange: "transform" }}
+      className="fixed bottom-0 left-0 right-0 z-50 gpu-layer"
     >
-      {/* Gradient fade above */}
-      <div className="absolute -top-12 left-0 right-0 h-12 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+      {/* Taller cinematic gradient fade above dock */}
+      <div className="absolute -top-16 left-0 right-0 h-16 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
 
-      <div className="bg-black/60 backdrop-blur-xl border-t border-white/[0.07] h-16">
+      {/* Dock with deep OTT glass */}
+      <div className="dock-glass h-16">
         <div className="max-w-lg mx-auto h-full flex items-center px-2">
           <LimelightNav
             items={items}

@@ -151,7 +151,7 @@ export default function DeployModal({ onClose }: DeployModalProps) {
               className="bg-blue-500 h-1 rounded-full"
               initial={{ width: "0%" }}
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+              transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
             />
           </div>
 
@@ -180,7 +180,7 @@ export default function DeployModal({ onClose }: DeployModalProps) {
               data-ocid="deploy.close_button"
               type="button"
               onClick={onClose}
-              className="w-full text-white/30 hover:text-white/60 text-xs transition-colors text-center mt-1"
+              className="btn-premium w-full text-white/30 hover:text-white/60 text-xs transition-colors text-center mt-1"
             >
               Cancel
             </button>

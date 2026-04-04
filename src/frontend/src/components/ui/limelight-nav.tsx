@@ -131,11 +131,17 @@ export const LimelightNav = ({
             className={`relative z-20 flex flex-1 h-full cursor-pointer items-center justify-center p-5 ${iconContainerClassName ?? ""}`}
             onClick={() => handleItemClick(index, onClick)}
             aria-label={label}
+            style={{ WebkitTapHighlightColor: "transparent" }}
           >
             <span
-              className={`w-6 h-6 flex items-center justify-center transition-[opacity,transform] duration-200 ease-out ${
+              className={`w-6 h-6 flex items-center justify-center transition-all duration-200 ease-out ${
                 isActive ? "opacity-100 scale-110" : "opacity-40 scale-100"
               } ${iconClassName ?? ""}`}
+              style={{
+                transform: isActive ? "scale(1.1)" : "scale(1)",
+                transition:
+                  "transform 0.25s cubic-bezier(0.25,1,0.5,1), opacity 0.2s ease",
+              }}
             >
               {icon}
             </span>
@@ -146,10 +152,10 @@ export const LimelightNav = ({
         ref={limelightRef}
         className={`absolute top-0 z-10 w-11 h-[5px] rounded-full ${
           isReady
-            ? "transition-[left] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+            ? "transition-[left] duration-[280ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
             : ""
         } ${limelightClassName ?? "bg-primary shadow-[0_50px_15px_var(--primary)]"}`}
-        style={{ left: "-999px", willChange: "transform" }}
+        style={{ left: "-999px", willChange: "left" }}
       >
         <div className="absolute left-[-30%] top-[5px] w-[160%] h-14 [clip-path:polygon(5%_100%,25%_0,75%_0,95%_100%)] bg-gradient-to-b from-primary/30 to-transparent opacity-80 pointer-events-none transition-opacity duration-200" />
       </div>

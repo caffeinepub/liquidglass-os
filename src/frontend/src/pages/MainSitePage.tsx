@@ -26,6 +26,53 @@ function useCounter(target: number, duration = 2000) {
   return value;
 }
 
+// ─── CountUp (intersection-based) ────────────────────────────────────────────
+function CountUp({
+  end,
+  suffix = "",
+  prefix = "",
+  decimals = 0,
+}: {
+  end: number;
+  suffix?: string;
+  prefix?: string;
+  decimals?: number;
+}) {
+  const [val, setVal] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const duration = 1800;
+          const start = Date.now();
+          const tick = () => {
+            const elapsed = Date.now() - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = 1 - (1 - progress) ** 3;
+            setVal(Number((ease * end).toFixed(decimals)));
+            if (progress < 1) requestAnimationFrame(tick);
+            else setVal(end);
+          };
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.3 },
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [end, decimals]);
+  return (
+    <div ref={ref}>
+      {prefix}
+      {decimals > 0 ? val.toFixed(decimals) : val}
+      {suffix}
+    </div>
+  );
+}
+
 // ─── Stats Panel ─────────────────────────────────────────────────────────────
 function StatsPanel() {
   const servers = useCounter(847);
@@ -35,7 +82,7 @@ function StatsPanel() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.9 }}
-      className="mt-12 inline-flex flex-wrap items-center justify-center gap-8 bg-black/40 border border-white/[0.08] rounded-2xl px-8 py-5 backdrop-blur-md"
+      className="mt-12 inline-flex flex-wrap items-center justify-center gap-8 bg-black/40 border border-white/[0.08] rounded-2xl px-8 py-5 backdrop-blur-md float-gentle"
     >
       <div className="text-center">
         <div className="text-2xl font-bold text-white">{servers}</div>
@@ -105,7 +152,7 @@ function HeroSection({ onDeploy }: { onDeploy: () => void }) {
 
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] pointer-events-none z-[1]">
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 animate-gradient-bg"
           style={{
             background:
               "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59,130,246,0.12), transparent)",
@@ -156,7 +203,7 @@ function HeroSection({ onDeploy }: { onDeploy: () => void }) {
             data-ocid="hero.primary_button"
             type="button"
             onClick={onDeploy}
-            className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-6 py-3 font-semibold transition-all duration-200 hover:shadow-[0_0_24px_rgba(59,130,246,0.5)] active:scale-95"
+            className="btn-premium ripple-effect bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-6 py-3 font-semibold hover:shadow-[0_0_24px_rgba(59,130,246,0.5)] active:scale-95"
           >
             Deploy Server
           </button>
@@ -166,7 +213,7 @@ function HeroSection({ onDeploy }: { onDeploy: () => void }) {
             onClick={() => {
               window.location.hash = "#/dashboard";
             }}
-            className="bg-white/10 hover:bg-white/[0.15] border border-white/10 text-white rounded-xl px-6 py-3 font-semibold transition-all duration-200 active:scale-95"
+            className="btn-premium bg-white/10 hover:bg-white/[0.15] border border-white/10 text-white rounded-xl px-6 py-3 font-semibold active:scale-95"
           >
             View Dashboard
           </button>
@@ -284,7 +331,7 @@ function PlanCard({
         </div>
       </div>
 
-      <div className="extra-specs border-t border-white/[0.05] pt-3 mb-4">
+      <div className="extra-specs border-t border-white/[0.05] pt-3 mb-4 transition-all">
         {plan.extras.map((e) => (
           <div
             key={e}
@@ -305,7 +352,7 @@ function PlanCard({
           type="button"
           data-ocid="plans.primary_button"
           onClick={onDeploy}
-          className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
+          className="btn-premium ripple-effect bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 py-2 text-sm font-semibold hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
         >
           Deploy
         </button>
@@ -357,11 +404,6 @@ function ServerGrid({ onDeploy }: { onDeploy: () => void }) {
 
 // ─── Performance ─────────────────────────────────────────────────────────────
 function PerformanceSection() {
-  const stats = [
-    { value: "99.9%", label: "Uptime SLA" },
-    { value: "<12ms", label: "Global Latency" },
-    { value: "18", label: "Data Centers" },
-  ];
   return (
     <section className="py-24 px-6 border-t border-white/[0.05]">
       <div className="max-w-6xl mx-auto">
@@ -380,7 +422,11 @@ function PerformanceSection() {
           </h2>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {stats.map((stat, i) => (
+          {[
+            { label: "Uptime SLA", end: 99.9, suffix: "%", decimals: 1 },
+            { label: "Global Latency", prefix: "<", end: 12, suffix: "ms" },
+            { label: "Data Centers", end: 18 },
+          ].map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
@@ -390,7 +436,12 @@ function PerformanceSection() {
               className="text-center bg-black/30 border border-white/[0.06] rounded-2xl p-8"
             >
               <div className="text-5xl font-bold text-white mb-2">
-                {stat.value}
+                <CountUp
+                  end={stat.end}
+                  suffix={stat.suffix}
+                  prefix={stat.prefix}
+                  decimals={stat.decimals ?? 0}
+                />
               </div>
               <div className="text-blue-400 text-xs font-medium uppercase tracking-widest">
                 {stat.label}
@@ -462,7 +513,7 @@ function WhyDarkSanta() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="bg-black/30 border border-white/[0.06] rounded-2xl p-6 hover:border-white/[0.12] hover:bg-black/40 transition-all duration-200"
+              className="card-hover bg-black/30 border border-white/[0.06] rounded-2xl p-6 hover:border-white/[0.12] hover:bg-black/40 transition-colors duration-200"
             >
               <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4">
                 {f.icon}
@@ -636,7 +687,7 @@ function CTASection({ onDeploy }: { onDeploy: () => void }) {
               data-ocid="cta.primary_button"
               type="button"
               onClick={onDeploy}
-              className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-8 py-3.5 font-semibold transition-all duration-200 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] active:scale-95"
+              className="btn-premium ripple-effect bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-8 py-3.5 font-semibold hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] active:scale-95"
             >
               Deploy Now
             </button>
@@ -646,7 +697,7 @@ function CTASection({ onDeploy }: { onDeploy: () => void }) {
               onClick={() => {
                 window.location.hash = "#/login";
               }}
-              className="bg-white/[0.08] hover:bg-white/[0.14] border border-white/10 text-white rounded-xl px-8 py-3.5 font-semibold transition-all duration-200 active:scale-95"
+              className="btn-premium bg-white/[0.08] hover:bg-white/[0.14] border border-white/10 text-white rounded-xl px-8 py-3.5 font-semibold active:scale-95"
             >
               Sign In
             </button>

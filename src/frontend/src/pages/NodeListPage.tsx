@@ -3,8 +3,6 @@ import { useState } from "react";
 import BottomDock from "../components/BottomDock";
 import DeployModal from "../components/DeployModal";
 import Navbar from "../components/Navbar";
-import { BeamsBackground } from "../components/ui/beams-background";
-import { EtheralShadow } from "../components/ui/etheral-shadow";
 
 interface NodeCard {
   id: string;
@@ -64,7 +62,7 @@ function MiniBar({ value }: { value: number }) {
   return (
     <div className="bg-white/10 rounded-full h-1 w-full">
       <div
-        className="bg-blue-500/70 rounded-full h-1 transition-all duration-1000 ease-out"
+        className="bg-blue-500/70 rounded-full h-1 transition-all duration-[800ms] ease-out"
         style={{ width: `${value}%` }}
       />
     </div>
@@ -80,21 +78,10 @@ export default function NodeListPage() {
 
   return (
     <div className="relative min-h-screen bg-[#050505] overflow-x-hidden">
-      {/* Background */}
+      {/* Lightweight CSS background — no canvas re-creation on route change */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="hidden md:block absolute inset-0">
-          <BeamsBackground intensity="subtle" className="absolute inset-0" />
-        </div>
-        <div className="hidden md:block absolute inset-0 opacity-30">
-          <EtheralShadow
-            color="rgba(30,64,175,0.6)"
-            animation={{ scale: 60, speed: 60 }}
-            noise={{ opacity: 0.4, scale: 1.2 }}
-            sizing="fill"
-          />
-        </div>
-        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/6 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-0 w-[350px] h-[350px] bg-purple-600/5 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/[0.06] rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-0 w-[350px] h-[350px] bg-purple-600/[0.05] rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black/80 to-transparent" />
       </div>
 
@@ -104,12 +91,15 @@ export default function NodeListPage() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+          transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
           className="max-w-5xl mx-auto mb-8 flex items-center justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl font-bold text-white tracking-tight inline-flex items-center gap-2">
               Your Nodes
+              <span className="text-xs text-white/30 bg-white/[0.04] border border-white/[0.06] rounded-full px-2 py-0.5 font-normal">
+                {NODES.length} nodes
+              </span>
             </h1>
             <p className="text-sm text-white/40 mt-1">
               Manage and monitor your active server nodes
@@ -119,7 +109,7 @@ export default function NodeListPage() {
             data-ocid="node_list.primary_button"
             type="button"
             onClick={() => setShowDeploy(true)}
-            className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
+            className="btn-premium ripple-effect bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-95"
           >
             Deploy Node
           </button>
@@ -135,12 +125,12 @@ export default function NodeListPage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
-                duration: 0.45,
+                duration: 0.4,
                 delay: i * 0.07,
                 ease: [0.25, 1, 0.5, 1],
               }}
               data-ocid={`node_list.item.${i + 1}`}
-              className="group bg-black/50 backdrop-blur-md md:backdrop-blur-[50px] border border-white/10 rounded-2xl p-5 cursor-pointer hover:border-white/[0.18] hover:bg-black/60 transition-all duration-200"
+              className="card-hover glass-2 glass-hover-deepen glass-noise group relative rounded-2xl p-5 cursor-pointer hover:border-blue-500/20 overflow-hidden transition-all duration-300"
               onClick={() => handleNavigateToNode(node.id)}
             >
               {/* Card header */}
@@ -155,7 +145,10 @@ export default function NodeListPage() {
                 </div>
                 {node.status === "online" ? (
                   <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_5px_rgba(52,211,153,0.8)]" />
+                    <span
+                      className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot"
+                      style={{ boxShadow: "0 0 5px rgba(52,211,153,0.8)" }}
+                    />
                     <span className="text-xs text-emerald-400 font-medium">
                       Online
                     </span>
@@ -172,13 +165,13 @@ export default function NodeListPage() {
 
               {/* Specs */}
               <div className="grid grid-cols-2 gap-2 mb-4">
-                <div className="bg-black/40 border border-white/[0.05] rounded-xl p-3">
+                <div className="glass-1 rounded-xl p-3">
                   <p className="text-[10px] uppercase tracking-widest text-white/30 mb-0.5">
                     RAM
                   </p>
                   <p className="text-white text-sm font-medium">{node.ram}</p>
                 </div>
-                <div className="bg-black/40 border border-white/[0.05] rounded-xl p-3">
+                <div className="glass-1 rounded-xl p-3">
                   <p className="text-[10px] uppercase tracking-widest text-white/30 mb-0.5">
                     CPU
                   </p>
@@ -219,7 +212,7 @@ export default function NodeListPage() {
                   e.stopPropagation();
                   handleNavigateToNode(node.id);
                 }}
-                className="w-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.08] text-white/70 hover:text-white rounded-xl px-4 py-2 text-sm font-medium transition-all duration-150 active:scale-95"
+                className="btn-premium ripple-effect w-full glass-1 hover:bg-white/[0.12] text-white/70 hover:text-white rounded-xl px-4 py-2 text-sm font-medium active:scale-95"
               >
                 Manage
               </button>
