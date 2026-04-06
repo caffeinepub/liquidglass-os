@@ -1,61 +1,37 @@
-# DarkSanta — Complete Premium SaaS Website
+# Mindloop
 
 ## Current State
-
-The project has a working multi-page React frontend with:
-- `App.tsx` using hash-based routing (#/nodes, #/node-list, home)
-- `MainSitePage.tsx` with hero, server plans grid, stats, footer
-- `NodeListPage.tsx` showing a list of nodes
-- `NodesPage.tsx` as the node detail/control panel
-- `BottomDock.tsx` with limelight indicator
-- `Navbar.tsx` with blur-on-scroll
-- `BeamsBackground.tsx` and `EtheralShadow.tsx` as animated backgrounds
-- V41 footer with DarkSanta branding
-- Framer Motion animations throughout
-- Basic Motoko backend (empty actor)
-
-Missing: Login page, Dashboard page, Deploy simulation modal, Terminal on Node page, Global presence map, proper route for /login and /dashboard.
+New project — no existing frontend pages. Backend is scaffolded with empty Motoko actor.
 
 ## Requested Changes (Diff)
 
 ### Add
-- `/login` route: Centered blur panel, minimal email+password form, smooth focus animations
-- `/dashboard` route: Server list with CPU/RAM bars, Start/Stop/Restart actions, empty state
-- Deploy Simulation Modal: Step-by-step animated modal (Allocating resources → Configuring node → Deploying server → Server online) with progress bar, triggered by "Deploy Server" CTA, redirects to node page after completion
-- Terminal component on Node page: Fake console with typing animation, blinking cursor, line-by-line reveal
-- Live stat fluctuation on Node page: CPU/RAM values change dynamically via setInterval
-- Global presence section on Home: Minimal SVG world map with glowing location dots and hover tooltips
-- Count-up animation on hero stats
-- Skeleton loaders / shimmer states on Dashboard
-- Page transitions (fade + slide ~400ms)
-- Bottom dock: Add Search and Profile icons (no-op), keep Home/Deploy/Nodes navigating
+- Full Mindloop landing page (single-page, 7 sections) built in React + TypeScript + Vite + Tailwind CSS + shadcn/ui
+- Custom design system via `index.css` with HSL CSS variables (pure black/white monochrome theme)
+- `.liquid-glass` global CSS class for glass effect buttons/containers
+- `fadeUp` Framer Motion animation helper used site-wide with staggered delays
+- **Navbar**: Fixed transparent, concentric-circle logo, nav links with • separators, social icon buttons
+- **Hero Section**: Fullscreen MP4 video background, avatar row, large heading, subtitle, email subscribe form
+- **Search Section**: Big heading, 3 AI platform cards with generated icons
+- **Mission Section**: Large video + scroll-driven word-by-word opacity reveal using useScroll/useTransform
+- **Solution Section**: Label + heading + widescreen video + 4-column feature grid
+- **CTA Section**: HLS video background (hls.js), overlay, logo, heading, two CTA buttons
+- **Footer**: Copyright left, Privacy/Terms/Contact links right
+- Dependencies: `framer-motion`, `hls.js`, `@fontsource/inter`, `@fontsource/instrument-serif`, `tailwindcss-animate`
+- Generated image assets: 3 avatars, 3 platform icons
 
 ### Modify
-- `App.tsx`: Add routes for #/login, #/dashboard
-- Hero: Floating glass cards with server specs preview
-- Node page: Add terminal section, make CPU/RAM bars fluctuate on interval
-- Server plan cards: Ensure hover expand with extra info works cleanly
-- Button styles: Consistent premium blue primary, ghost secondary across all pages
-- Navbar: Ensure center-aligned links + Deploy CTA
-- All animations: Use cubic-bezier(0.25, 1, 0.5, 1), 0.3s–0.8s duration
+- `index.css` — replace default variables with full Mindloop design token set
+- `tailwind.config.js` — add `tailwindcss-animate` plugin, `fontFamily` extensions for Inter and Instrument Serif
+- `package.json` — add all new dependencies
 
 ### Remove
-- Any remaining Caffeine watermarks or AI logos in footer/pages
-- Redundant/duplicate component files (DockBackup, RightDock)
+- Nothing from existing scaffolding (empty actor stays)
 
 ## Implementation Plan
-
-1. Update `App.tsx` to handle #/login and #/dashboard hash routes
-2. Create `LoginPage.tsx` — centered glass panel, email+password inputs, premium feel
-3. Create `DashboardPage.tsx` — server list cards with CPU/RAM animated bars, actions, empty state
-4. Create `DeployModal.tsx` — animated multi-step modal with progress bar
-5. Update `NodesPage.tsx` — add Terminal component with typing animation, live stat fluctuation
-6. Add GlobalPresence section to `MainSitePage.tsx` — SVG world map with glowing nodes
-7. Add floating glass cards to hero section
-8. Add count-up animations to hero stats
-9. Update bottom dock icons (Home, Search, Deploy, Profile)
-10. Ensure all buttons use consistent premium style (blue primary, ghost secondary)
-11. Add page transition wrapper (fade+slide)
-12. Add skeleton loaders to Dashboard
-13. Remove duplicate/unused components
-14. Full mobile optimization — reduced blur/animation on small screens
+1. Install npm deps: `framer-motion`, `hls.js`, `@fontsource/inter`, `@fontsource/instrument-serif`, `tailwindcss-animate`
+2. Update `tailwind.config.js` with font families and animate plugin
+3. Rewrite `src/frontend/src/index.css` with full CSS variable set + `.liquid-glass` class + font imports
+4. Build `App.tsx` as single scrolling page with all 7 sections
+5. Use generated assets: `/assets/generated/avatar-{1,2,3}.dim_64x64.png`, `/assets/generated/icon-{chatgpt,perplexity,google}.dim_200x200.png`
+6. Validate build passes
